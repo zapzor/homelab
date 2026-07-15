@@ -113,8 +113,8 @@ Since this is a single point of failure, backups matter more than usual here:
 
 | What | Method | Frequency | Destination |
 |---|---|---|---|
-| VM/LXC snapshots | vzdump | daily AND weekly | local disk + cloud |
-| Docker volumes/configs | rsync | daily | My PC + cloud |
+| VM/LXC snapshots | vzdump | Daily AND weekly | local disk + cloud |
+| Docker volumes/configs | rsync | Daily | My PC + cloud |
 | Documentation & IaC | Git | On change | GitHub (this repo) |
 
 **Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from PC
