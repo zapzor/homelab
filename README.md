@@ -13,7 +13,7 @@ A single-node home lab built on a repurposed PC, running Proxmox as the hypervis
 | **Hardware** | 1x repurposed PC |
 | **Hypervisor** | Proxmox VE 9 |
 | **Workloads** | 15+ VMs / LXC containers, Docker inside several |
-| **Network** | TP-Link Archer C7/OpenWrt |
+| **Network** | TP-Link Archer C7/OpenWrt, TLSG105PE  |
 | **Uptime target** | 24x7 |
 
 This lab started as a way to self-host services, and has grown into a small self-hosted platform for media, home automation, dev/test, backups, etc..
@@ -25,7 +25,6 @@ This lab started as a way to self-host services, and has grown into a small self
 Repurposed PC:
 
 | Component | Spec |
-|---|---|
 | CPU | i5-6400 |
 | RAM | 32GB DDR4 |
 | Storage | 1TB NVMe boot + 2x2TB backup/media storage |
@@ -48,7 +47,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Name | Type | Purpose | OS |
 |---|---|---|---|
 | Wireguard | LXC | VPN | Debian |
-| Turnkey | LXC | File storage / shares | TrueNAS |
+| Turnkey | LXC | Media server / file storage | Debian |
 | Pi-hole | LXC | DNS filtering | Debian |
 | Docker | LXC | Docker containers | Debian |
 | changedetection | LXC | Monitors websites for changes | Debian |
@@ -85,6 +84,57 @@ docker/
     └── docker-compose.yml
 ```
 
+
+## 🌐 Network
+
+| | |
+|---|---|
+| **Router/Firewall** | OpenWRT |
+| **Switch** | Managed, TLSG105PE |
+| **Wi-Fi** | Deco Mesh M4 |
+| **VLANs** | Management, Homelab, IoT, Guest |
+| **DNS/Ad-blocking** | Pi-hole, running as LXC above |
+| **Remote access** | WireGuard |
+
+> 🔒 Internal IP ranges, hostnames, and access credentials are intentionally omitted from this public documentation.
+
+### Reverse Proxy / Access
+
+- **Reverse proxy:** Nginx Proxy Manager
+- **TLS:** Let's Encrypt via DNS challenge
+- **External exposure:** none — LAN + VPN only
+
+---
+
+## 💾 Backups & Disaster Recovery
+
+Since this is a single point of failure, backups matter more than usual here:
+
+| What | Method | Frequency | Destination |
+|---|---|---|---|
+| VM/LXC snapshots | vzdump | daily AND weekly | local disk + cloud |
+| Docker volumes/configs | rsync | daily | My PC + cloud |
+| Documentation & IaC | Git | On change | GitHub (this repo) |
+
+**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from PC
+
+---
+
+## 🛠️ Monitoring
+
+- Grafana + Prometheus / Netdata for service and resource monitoring
+- Notification method —  ntfy alerts on service downtime
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Migrate VMs/LXCs from Debian to Rocky Linux
+- [ ] Add Proxmox Backup Server
+- [ ] Move DNS to VLAN-isolated LXC
+- [ ] ...
+
+---
 
 
 *Last updated: 15/07/26*
