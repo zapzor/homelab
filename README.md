@@ -92,7 +92,7 @@ docker/
 |---|---|
 | **Router/Firewall** | OpenWRT |
 | **Switch** | Managed, TLSG105PE |
-| **Wi-Fi** | Deco Mesh M4 |
+| **Wi-Fi** | Deco Mesh M4  |
 | **VLANs** | Management, Homelab, IoT, Guest |
 | **DNS/Ad-blocking** | Pi-hole, running as LXC above |
 | **Remote access** | WireGuard |
