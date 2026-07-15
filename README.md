@@ -23,14 +23,15 @@ This lab started as a way to self-host services, and has grown into a small self
 ## 🖥️ Hardware
 
 Repurposed PC:
-
 | Component | Spec |
+|---|---|
 | CPU | i5-6400 |
 | RAM | 32GB DDR4 |
 | Storage | 1TB NVMe boot + 2x2TB backup/media storage |
 | GPU | GTX 1060 — passed through for transcoding |
-| Network | onboard 1GbE |
+| Network | Onboard 1GbE |
 
+> 💡 *Note: single-node setups mean no hardware redundancy — see [Backups](#-backups--disaster-recovery) for how failure is handled.*
 
 ---
 
@@ -102,7 +103,7 @@ docker/
 
 - **Reverse proxy:** Nginx Proxy Manager
 - **TLS:** Let's Encrypt via DNS challenge
-- **External exposure:** none — LAN + VPN only
+- **External exposure:** None — LAN + VPN only
 
 ---
 
@@ -122,7 +123,7 @@ Since this is a single point of failure, backups matter more than usual here:
 
 ## 🛠️ Monitoring
 
-- Grafana + Prometheus / Netdata for service and resource monitoring
+- Grafana + Prometheus for service and resource monitoring
 - Notification method —  ntfy alerts on service downtime
 
 ---
