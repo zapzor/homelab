@@ -13,10 +13,10 @@ A single-node home lab built on a repurposed PC, running Proxmox as the hypervis
 | **Hardware** | 1x repurposed PC |
 | **Hypervisor** | Proxmox VE 9 |
 | **Workloads** | 15+ VMs / LXC containers, Docker inside several |
-| **Network** | TP-Link Archer C7/OpenWRT + TL-SG105PE, VLAN-segmented |
+| **Network** | TP-Link Archer C7/OpenWrt |
 | **Uptime target** | 24x7 |
 
-This lab started as a way to self-host services , and has grown into a small self-hosted platform for media, home automation, dev/test, backups, etc..
+This lab started as a way to self-host services, and has grown into a small self-hosted platform for media, home automation, dev/test, backups, etc..
 
 ---
 
@@ -27,17 +27,66 @@ Repurposed PC:
 | Component | Spec |
 |---|---|
 | CPU | i5-6400 |
-| RAM | 64GB DDR4 |
+| RAM | 32GB DDR4 |
 | Storage | 1TB NVMe boot + 2x2TB backup/media storage |
 | GPU | GTX 1060 — passed through for transcoding |
 | Network | onboard 1GbE |
 
-> 💡 *Note: single-node setups mean no hardware redundancy — see [Backups](#-backups--disaster-recovery) for how failure is handled.*
 
 ---
 
+## 🧱 Virtualization Layer — Proxmox VE
+
+Proxmox is installed directly on bare metal and hosts everything below.
+
+- **Storage backend:** LVM-thin / directory
+- **Networking:** Linux bridge — see [Network](#-network)
+- **Backup method:** vzdump to internal and external (off premise) drive
+
+### VMs & LXC Containers
+
+| Name | Type | Purpose | OS |
+|---|---|---|---|
+| Wireguard | LXC | VPN | Debian |
+| Turnkey | LXC | File storage / shares | TrueNAS |
+| Pi-hole | LXC | DNS filtering | Debian |
+| Docker | LXC | Docker containers | Debian |
+| changedetection | LXC | Monitors websites for changes | Debian |
+| Audiobookshelf | LXC | Audiobook storage | Debian |
+| Nginx proxy manager | LXC | reverse proxy | Debian |
+| Frigate | LXC | CCTV monitoring | Debian |
+| mqtt | LXC | Home automation protocol | Debian |
+| Caliweb | LXC | epub storage | Debian |
+| Home Assistant | VM | Home automation platform | HAOS |
+| Grafana | LXC | Data visualization | Debian |
+| Prometheus | LXC | Event monitoring | Debian |
+| Kali | LXC | Pen testing | Kali Linux |
+| Homepage | LXC | Services overview | Debian |
+| Commafeed | LXC | RSS feed | Debian |
+
+## 📦 Containerized Services (Docker)
+
+Docker runs inside dedicated VMs/LXCs above (not directly on the Proxmox host, keeping the hypervisor clean).
+
+| Service | Purpose | Runs On |
+|---|---|---|
+| Joplin server | Note sync | Docker |
+| Redlib | Reddit frontend | Docker |
+| Immich | Photo backup | Docker |
+
+Compose files are organized as:
+```
+docker/
+├── Joplin server/
+│   └── docker-compose.yml
+├── Redlib/
+│   └── docker-compose.yml
+└── Immich/
+    └── docker-compose.yml
+```
 
 
-*Last updated: 14/07/26*
+
+*Last updated: 15/07/26*
 
 ------------------- WIP -------------------
