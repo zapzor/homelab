@@ -137,7 +137,4 @@ Since this is a single point of failure, backups matter more than usual here:
 
 ---
 
-
-*Last updated: 15/07/26*
-
 ------------------- WIP -------------------
