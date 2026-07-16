@@ -1,4 +1,4 @@
-# 🏠 Homelab
+# 🏠 HomeLab
 
 A single-node home lab built on a repurposed PC, running Proxmox as the hypervisor with a mix of VMs, LXC containers, and Docker workloads.
 
