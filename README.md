@@ -63,6 +63,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Kali | LXC | Pen testing | Kali Linux |
 | Homepage | LXC | Services overview | Debian |
 | Commafeed | LXC | RSS feed | Debian |
+| Windows | VM | Windows Server | Windows |
 
 ## 📦 Containerized Services (Docker)
 
