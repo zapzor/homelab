@@ -138,4 +138,10 @@ Since this is a single point of failure, backups matter more than usual here:
 
 ---
 
+## 📸 Screenshots / Diagram
+<img width="1920" height="966" alt="proxmox_dashboard" src="https://github.com/user-attachments/assets/38db4d28-c883-4ee2-bf43-6bf3a84a583d" />
+<img width="1920" height="965" alt="Dashboard" src="https://github.com/user-attachments/assets/5e8520f3-a5f5-4a96-8a8b-89e224708ee2" />
+
+
+
 ------------------- WIP -------------------
