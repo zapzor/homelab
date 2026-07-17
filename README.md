@@ -27,7 +27,7 @@ Repurposed PC:
 |---|---|
 | CPU | i5-6400 |
 | RAM | 32GB DDR4 |
-| Storage | 1TB NVMe boot + 2x2TB backup/media storage |
+| Storage | 1TB NVMe boot + 1+2TB backup/media storage |
 | GPU | GTX 1060 — passed through for transcoding |
 | Network | Onboard 1GbE |
 
