@@ -31,8 +31,6 @@ Repurposed PC:
 | GPU | GTX 1060 — passed through for transcoding |
 | Network | Onboard 1GbE |
 
-> 💡 *Note: single-node setups mean no hardware redundancy — see [Backups](#-backups--disaster-recovery) for how failure is handled.*
-
 ---
 
 ## 🧱 Virtualization Layer — Proxmox VE
@@ -98,8 +96,6 @@ docker/
 | **DNS/Ad-blocking** | Pi-hole, running as LXC above |
 | **Remote access** | WireGuard |
 
-> 🔒 Internal IP ranges, hostnames, and access credentials are intentionally omitted from this public documentation.
-
 ### Reverse Proxy / Access
 
 - **Reverse proxy:** Nginx Proxy Manager
@@ -139,7 +135,7 @@ Since this is a single point of failure, backups matter more than usual here:
 ---
 
 ## 📸 Screenshots / Diagram
-<img width="1920" height="964" alt="proxmox_dash" src="https://github.com/user-attachments/assets/1098fdc5-5a1e-49a1-9774-6c1be99f15a1" />
+<img width="1920" height="963" alt="prox_dash" src="https://github.com/user-attachments/assets/1207113c-eec1-4304-acb8-5229a0ba4626" />
 <img width="1920" height="965" alt="Dashboard" src="https://github.com/user-attachments/assets/5e8520f3-a5f5-4a96-8a8b-89e224708ee2" />
 
 
