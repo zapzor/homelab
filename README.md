@@ -144,7 +144,7 @@ Since this is a single point of failure, backups matter more than usual here:
 - [ ] Add Proxmox Backup Server
 - [ ] Move DNS to VLAN-isolated LXC
 - [ ] Automate backup testing
-- [ ] Seperate VLAN for server
+- [ ] Separate VLAN for server
 - [ ] ...
 
 ---
