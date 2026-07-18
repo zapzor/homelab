@@ -12,8 +12,8 @@ A single-node home lab built on a repurposed PC, running Proxmox as the hypervis
 |---|---|
 | **Hardware** | 1x repurposed PC |
 | **Hypervisor** | Proxmox VE 9 |
-| **Workloads** | 15+ VMs / LXC containers, Docker inside several |
-| **Network** | TP-Link Archer C7/OpenWrt, TLSG105PE  |
+| **Workloads** | 30+ VMs / LXC containers, Docker inside several |
+| **Network** | TP-Link Archer C7/OpenWrt, TP-Link TLSG105PE  |
 | **Uptime target** | 24x7 |
 
 This lab started as a way to self-host services, and has grown into a small self-hosted platform for media, home automation, dev/test, backups, etc..
@@ -46,21 +46,21 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Name | Type | Purpose | OS |
 |---|---|---|---|
 | Wireguard | LXC | VPN | Debian |
-| Turnkey | LXC | Media server / file storage | Debian |
+| Mediaserver | LXC | Media server / file storage | Debian |
 | Pi-hole | LXC | DNS filtering | Debian |
 | Docker | LXC | Docker containers | Debian |
 | changedetection | LXC | Monitors websites for changes | Debian |
 | Nginx proxy manager | LXC | reverse proxy | Debian |
 | Frigate | LXC | CCTV monitoring | Debian |
 | mqtt | LXC | Home automation protocol | Debian |
-| Caliweb | LXC | epub storage | Debian |
+| Caliweb | LXC | Calibre Web | Debian |
 | Home Assistant | VM | Home automation platform | HAOS |
 | Grafana | LXC | Data visualization | Debian |
 | Prometheus | LXC | Event monitoring | Debian |
 | Kali | LXC | Pen testing | Kali Linux |
 | Homepage | LXC | Services overview | Debian |
 | Commafeed | LXC | RSS feed | Debian |
-| Windows | VM | Windows Server | Windows |
+| Windows | VM | Windows Server 2022 | Windows |
 
 ## 📦 Containerized Services (Docker)
 
@@ -90,7 +90,7 @@ docker/
 |---|---|
 | **Router/Firewall** | OpenWrt |
 | **Switch** | Managed, TLSG105PE |
-| **Wi-Fi** | Deco Mesh M4  |
+| **Wi-Fi** | Archer C7 Router, Deco Mesh M4 AP  |
 | **VLANs** | Management, Homelab, IoT, Guest |
 | **DNS/Ad-blocking** | Pi-hole, running as LXC above |
 | **Remote access** | WireGuard |
@@ -113,22 +113,38 @@ Since this is a single point of failure, backups matter more than usual here:
 | Docker volumes/configs | rsync | Daily | My PC + cloud |
 | Documentation & IaC | Git | On change | GitHub (this repo) |
 
-**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from PC
+**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from PC. Restore can take more than a day from cloud, around 2 hours onsite.
 
 ---
 
 ## 🛠️ Monitoring
 
 - Grafana + Prometheus for service and resource monitoring
-- Notification method —  ntfy alerts on service downtime
+- Notification method —  Ntfy alerts on service downtime
 
 ---
 
+## 🎯 Skills Demonstrated
+
+| Skill | Evidence in This Lab |
+|:---|:---|
+| **Virtualization** | Proxmox VE bare-metal hypervisor, VM/LXC provisioning, GPU passthrough (GTX 1060), resource allocation |
+| **Linux Administration** | Debian-based LXC containers, package management, shell scripting, systemd services, log troubleshooting |
+| **Networking** | VLAN segmentation (IoT), OpenWrt router/firewall config, WireGuard VPN, DNS (Pi-hole + Unbound), TCP/IP troubleshooting |
+| **Containerization** | Docker Compose workloads, container networking, volume management, image updates |
+| **Reverse Proxy & Web Services** | Nginx Proxy Manager, TLS termination, Let's Encrypt DNS challenges, internal service exposure |
+| **Monitoring & Observability** | Prometheus metrics collection, Grafana dashboards, Ntfy alerting on service downtime |
+| **Backup & Disaster Recovery** | vzdump scheduling, rsync automation, offsite/cloud replication, documented RTO/RPO, recovery runbooks |
+| **Security & Hardening** | Network segmentation, zero external exposure policy, DNS-based ad/malware filtering, VPN-only remote access |
+| **Infrastructure as Code** | Git-tracked configs, Docker Compose files, version-controlled documentation |
+| **Hardware & Systems** | Repurposed PC build, storage planning (NVMe + HDD tiering), GPU passthrough configuration |
+
 ## 🗺️ Roadmap
 
-- [ ] Migrate VMs/LXCs from Debian to Rocky Linux
 - [ ] Add Proxmox Backup Server
 - [ ] Move DNS to VLAN-isolated LXC
+- [ ] Automate backup testing
+- [ ] Seperate VLAN for server
 - [ ] ...
 
 ---
@@ -140,9 +156,3 @@ Since this is a single point of failure, backups matter more than usual here:
 <img width="1920" height="964" alt="homepage" src="https://github.com/user-attachments/assets/b3470baf-151b-4b60-b03f-4aaa0ada8b65" />
 <img width="1920" height="968" alt="grafana" src="https://github.com/user-attachments/assets/7d44e1c9-005b-4808-9088-94202115c88a" />
 <img width="1920" height="959" alt="grafana_2" src="https://github.com/user-attachments/assets/d2df7b17-b993-4a47-86e4-389ae78a7116" />
-
-
-
-
-
-------------------- WIP -------------------
