@@ -50,7 +50,6 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Pi-hole | LXC | DNS filtering | Debian |
 | Docker | LXC | Docker containers | Debian |
 | changedetection | LXC | Monitors websites for changes | Debian |
-| Audiobookshelf | LXC | Audiobook storage | Debian |
 | Nginx proxy manager | LXC | reverse proxy | Debian |
 | Frigate | LXC | CCTV monitoring | Debian |
 | mqtt | LXC | Home automation protocol | Debian |
@@ -89,7 +88,7 @@ docker/
 
 | | |
 |---|---|
-| **Router/Firewall** | OpenWRT |
+| **Router/Firewall** | OpenWrt |
 | **Switch** | Managed, TLSG105PE |
 | **Wi-Fi** | Deco Mesh M4  |
 | **VLANs** | Management, Homelab, IoT, Guest |
