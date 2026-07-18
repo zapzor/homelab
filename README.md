@@ -1,4 +1,4 @@
-# 🏠 HomeLab
+# 🏠 Homelab
 
 A single-node home lab built on a repurposed PC, running Proxmox as the hypervisor with a mix of VMs, LXC containers, and Docker workloads.
 
@@ -135,6 +135,7 @@ Since this is a single point of failure, backups matter more than usual here:
 
 ## 📸 Screenshots / Diagram
 
+![Network Diagram](network-diagram.svg)
 <img width="1920" height="963" alt="prox_dash" src="https://github.com/user-attachments/assets/1207113c-eec1-4304-acb8-5229a0ba4626" />
 <img width="1920" height="964" alt="homepage" src="https://github.com/user-attachments/assets/b3470baf-151b-4b60-b03f-4aaa0ada8b65" />
 <img width="1920" height="968" alt="grafana" src="https://github.com/user-attachments/assets/7d44e1c9-005b-4808-9088-94202115c88a" />
