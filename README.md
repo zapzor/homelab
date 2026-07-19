@@ -60,7 +60,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Kali | LXC | Pen testing | Kali Linux |
 | Homepage | LXC | Services overview | Debian |
 | Commafeed | LXC | RSS feed | Debian |
-| Windows | VM | Windows Server 2022 | Windows |
+| Windows | VM | Windows Server testing (AD, GPO, RDS) | Windows Server 2022 |
 
 ## 📦 Containerized Services (Docker)
 
@@ -95,6 +95,18 @@ docker/
 | **DNS/Ad-blocking** | Pi-hole, running as LXC above |
 | **Remote access** | WireGuard |
 
+## 🔒 Security
+
+| Layer | Control |
+|:---|:---|
+| Network segmentation | 1 VLAN to isolate IoT, planned expansion for for server and management traffic |
+| Remote access | WireGuard only; no services exposed to the internet |
+| DNS filtering | Pi-hole blocks ads/malware at the network level |
+| Encryption | TLS via Let's Encrypt for internal services; VPN tunnel for remote access |
+| Host hardening | Proxmox web UI restricted to management VLAN; SSH key-based auth, root login disabled |
+
+Running LXC containers with privileged flags (required for some bind mounts) increases attack surface vs. unprivileged containers. Evaluating Proxmox Backup Server as part of recovery hardening.
+
 ### Reverse Proxy / Access
 
 - **Reverse proxy:** Nginx Proxy Manager
@@ -109,11 +121,11 @@ Since this is a single point of failure, backups matter more than usual here:
 
 | What | Method | Frequency | Destination |
 |---|---|---|---|
-| VM/LXC snapshots | vzdump | Daily AND weekly | local disk + cloud |
+| VM/LXC snapshots | vzdump | Daily incremental, weekly full; ~250GB total backup set | local disk + cloud |
 | Docker volumes/configs | rsync | Daily | My PC + cloud |
 | Documentation & IaC | Git | On change | GitHub (this repo) |
 
-**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from PC. Restore can take more than a day from cloud, around 2 hours onsite.
+**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from PC. Restore can take up to ~12 hours from cloud, ~1 hour onsite.
 
 ---
 
@@ -136,7 +148,6 @@ Since this is a single point of failure, backups matter more than usual here:
 | Monitoring | Prometheus, Grafana, ntfy alerts |
 | Backup & Recovery | Proxmox backups, rsync, recovery documentation |
 | Security | Network segmentation, VPN-only access, Pi-hole/Unbound |
-| Infrastructure as Code | Git-tracked configs and Docker Compose |
 | Hardware | Home server build, storage planning, GPU passthrough |
 
 ## 🗺️ Roadmap
