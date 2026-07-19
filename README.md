@@ -76,14 +76,16 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Wireguard | LXC | VPN | Debian |
 | Mediaserver | LXC | Media server / file storage | Debian |
 | Pi-hole | LXC | DNS filtering | Debian |
+| Postgresql | LXC | SQL Database | Debian
 | Docker | LXC | Docker containers | Debian |
 | changedetection | LXC | Monitors websites for changes | Debian |
-| Nginx proxy manager | LXC | reverse proxy | Debian |
+| Nginx proxy manager | LXC | Reverse proxy | Debian |
 | Frigate | LXC | CCTV monitoring | Debian |
 | mqtt | LXC | Home automation protocol | Debian |
 | Calibre Web | LXC | Calibre Web | Debian |
 | Home Assistant | VM | Home automation platform | HAOS |
 | Grafana | LXC | Data visualization | Debian |
+| Invidious | LXC | Youtube frontend | Debian |
 | Prometheus | LXC | Event monitoring | Debian |
 | Kali | LXC | Pen testing | Kali Linux |
 | Homepage | LXC | Services overview | Debian |
