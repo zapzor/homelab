@@ -11,13 +11,15 @@ Most of this was figured out during setup. Once it works, it tends to keep worki
 
 **Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. Moved them to LXC. Kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
 
-**GPU passthrough** — I needed to use gpu passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI doesn't mention this (at the time), so from that I learned to prefer doing things through the command line for better feedback.
+**GPU passthrough** — I needed gpu passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI didn't mention this at the time, so from that I learned to prefer doing things through the command line for better feedback.
 
 **Storage** — Initially, I used a 150GB drive for the boot drive, thinking it would be sufficient. But as the number of services grew, I realised I would need more storage. I upgraded to a larger SSD a few months later. Should have planned for 2–3x from the start.
 
 **Network segmentation** — IoT VLAN wasn't hard to configure, but it was annoying to retrofit after already having a few devices on the main LAN and having to reconfigure some smart home gear. Do the VLANs first.
 
-**Backups** — vzdump runs daily incrementals and weekly fulls. I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. Turns out the network connection dropped mid-transfer. Now I validate backups with checksums before trusting them.=
+**Backups** — vzdump runs daily incrementals and weekly fulls. I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. Turns out the network connection dropped mid-transfer. Now I validate backups with checksums before trusting them.
+
+---
 
 ## 📋 Overview
 
@@ -30,6 +32,22 @@ Most of this was figured out during setup. Once it works, it tends to keep worki
 
 ---
 
+## 🎯 Skills Demonstrated
+
+| Skill | Experience |
+|:---|:---|
+| Virtualization | Proxmox VE, VMs/LXC, GPU passthrough |
+| Linux | Debian administration, shell scripting, systemd, troubleshooting |
+| Networking | VLANs, OpenWrt, WireGuard, DNS, firewall configuration |
+| Docker | Docker Compose, networking, persistent volumes |
+| Reverse Proxy | Nginx Proxy Manager, TLS, Let's Encrypt |
+| Monitoring | Prometheus, Grafana, ntfy alerts |
+| Backup & Recovery | Proxmox backups, rsync, recovery documentation |
+| Security | Network segmentation, VPN-only access, Pi-hole/Unbound |
+| Hardware | Home server build, storage planning, GPU passthrough |
+
+---
+
 ## 🖥️ Hardware
 
 Repurposed PC:
@@ -37,7 +55,7 @@ Repurposed PC:
 |---|---|
 | CPU | i5-6400 |
 | RAM | 32GB DDR4 |
-| Storage | KINGSTON SA400S37480G (SATA 500GB boot/lvm) + ST2000VN004-2E4164 (SATA 2TB backup/media storage |
+| Storage | KINGSTON SA400S37480G (SATA 500GB boot/lvm) + ST2000VN004-2E4164 (SATA 2TB backup/media storage) |
 | GPU | GTX 1060 — passed through for transcoding |
 | Network | Onboard 1GbE |
 
@@ -63,14 +81,16 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Nginx proxy manager | LXC | reverse proxy | Debian |
 | Frigate | LXC | CCTV monitoring | Debian |
 | mqtt | LXC | Home automation protocol | Debian |
-| Caliweb | LXC | Calibre Web | Debian |
+| Calibre Web | LXC | Calibre Web | Debian |
 | Home Assistant | VM | Home automation platform | HAOS |
 | Grafana | LXC | Data visualization | Debian |
 | Prometheus | LXC | Event monitoring | Debian |
 | Kali | LXC | Pen testing | Kali Linux |
 | Homepage | LXC | Services overview | Debian |
 | Commafeed | LXC | RSS feed | Debian |
-| Windows | VM | Windows Server testing | Windows Server 2022 |
+| Windows | VM | Windows Server 2022 — planned AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
+
+---
 
 ## 📦 Containerized Services (Docker)
 
@@ -84,14 +104,16 @@ Proxmox is installed directly on bare metal and hosts everything below.
 Compose files are organized as:
 ```
 docker/
-├── Joplin server/
+├── joplin_server/
 │   └── docker-compose.yml
-├── Redlib/
+├── redlib/
 │   └── docker-compose.yml
-└── Immich/
+└── immich/
     └── docker-compose.yml
 ```
 Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead (~50MB of RAM per container) and better proxmox integration. Docker is retained for services with complex dependency trees or official Docker-only recommendations.
+
+---
 
 ## 🌐 Network
 
@@ -100,9 +122,11 @@ Docker runs inside the dedicated LXC above. Most services were previously runnin
 | **Router/Firewall** | OpenWrt |
 | **Switch** | Managed, TLSG105PE |
 | **Wi-Fi** | Archer C7 Router, Deco Mesh M4 AP  |
-| **VLANs** | Management, Homelab, IoT, Guest |
+| **VLANs** | 1 VLAN to isolate IoT, planned expansion for server and management traffic |
 | **DNS/Ad-blocking** | Pi-hole, running as LXC above |
 | **Remote access** | WireGuard |
+
+---
 
 ## 🔒 Security
 
@@ -114,7 +138,7 @@ Docker runs inside the dedicated LXC above. Most services were previously runnin
 | Encryption | TLS via Let's Encrypt for internal services; VPN tunnel for remote access |
 | Host hardening | Proxmox web UI restricted to management VLAN; SSH key-based auth, root login disabled |
 
-Running LXC containers with privileged flags (required for some bind mounts) increases attack surface vs. unprivileged containers, however I'm not especially concerned as this server has no external exposure. That said, I plan on mitigating this regardless by restricting privileged containers to the management VLAN when available. Evaluating Proxmox Backup Server as part of recovery hardening.
+Running LXC containers with privileged flags (required for some bind mounts) increases attack surface vs. unprivileged containers. While the attack surface is reduced by VPN-only access, I still plan to minimize privileged containers as a defense-in-depth measure. Evaluating Proxmox Backup Server as part of recovery hardening.
 
 ### Reverse Proxy / Access
 
@@ -130,11 +154,11 @@ Since this is a single point of failure, backups matter more than usual here:
 
 | What | Method | Frequency | Destination |
 |---|---|---|---|
-| VM/LXC snapshots | vzdump | Daily incremental, weekly full; ~250GB total backup set | local disk + cloud |
+| VM/LXC snapshots | vzdump | daily, weekly; ~250GB total backup set | local disk + cloud |
 | Docker volumes/configs | rsync | Daily | workstation + cloud |
 | Documentation | Git | On change | GitHub (this repo) |
 
-**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from PC. Restore can take ~14 hours from cloud, ~1 hour onsite. Since cloud restores have been unreliable in my experience, I have an rsync cronjob configured which syncs the vzdumps to the cloud with checksum validation. In the event I need to restore from the cloud, I have a local disk I can rsync those vzdumps to, then restore from that disk.
+**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from workstation. Restore can take ~14 hours from cloud, ~1 hour onsite. My "cloud" is a old laptop with a 2TB disk, hosted offsite. Since cloud restores have been unreliable in my experience, I have an rsync cronjob configured which syncs the vzdumps to the cloud with checksum validation. In the event I need to restore from the cloud, I have a local disk I can rsync those vzdumps to, then restore from that disk.
 
 ---
 
@@ -145,29 +169,14 @@ Since this is a single point of failure, backups matter more than usual here:
 
 ---
 
-## 🎯 Skills Demonstrated
-
-| Skill | Experience |
-|:---|:---|
-| Virtualization | Proxmox VE, VMs/LXC, GPU passthrough |
-| Linux | Debian administration, shell scripting, systemd, troubleshooting |
-| Networking | VLANs, OpenWrt, WireGuard, DNS, firewall configuration |
-| Docker | Docker Compose, networking, persistent volumes |
-| Reverse Proxy | Nginx Proxy Manager, TLS, Let's Encrypt |
-| Monitoring | Prometheus, Grafana, ntfy alerts |
-| Backup & Recovery | Proxmox backups, rsync, recovery documentation |
-| Security | Network segmentation, VPN-only access, Pi-hole/Unbound |
-| Hardware | Home server build, storage planning, GPU passthrough |
-
----
-
 ## 🗺️ Roadmap
 
-- [ ] Add Proxmox Backup Server
-- [ ] Move DNS to VLAN-isolated LXC
-- [ ] Automate backup testing
-- [ ] Separate VLAN for server
-- [ ] ...
+| Goal | Priority | Blocker |
+|---|---|---|
+| Proxmox Backup Server | Medium | Need another server |
+| Automate backup testing | Medium | PBS deployment |
+| VLAN-isolated DNS | Low | Need another switch |
+| Separate server VLAN | Low | Need another switch |
 
 ---
 
