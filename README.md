@@ -20,6 +20,20 @@ This lab started as a way to self-host services, and has grown into a small self
 
 ---
 
+## 🧠 Some Lessons Learned
+
+Most of this was figured out during setup. Once it works, it tends to keep working, short of a hardware failure (in my experience). Things generally break when you try changing something without first reviewing the documentation.
+
+**Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. Moved them to LXC. Kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
+
+**GPU passthrough** — I needed to use gpu passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI doesn't mention this (at the time), so from that I learned to prefer doing things through the command line for better feedback.
+
+**Storage** — Initially, I used a 150GB drive for the boot drive, thinking it would be sufficient. But as the number of services grew, I realised I would need more storage. I upgraded to a larger SSD a few months later. Should have planned for 2–3x from the start.
+
+**Network segmentation** — IoT VLAN wasn't hard to configure, but it was annoying to retrofit after already having a few devices on the main LAN and having to reconfigure some smart home gear. Do the VLANs first.
+
+**Backups** — `vzdump` runs daily. I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. Turns out the network connection dropped mid-transfer. Now I validate backups with checksums before trusting them.
+
 ## 🖥️ Hardware
 
 Repurposed PC:
@@ -27,7 +41,7 @@ Repurposed PC:
 |---|---|
 | CPU | i5-6400 |
 | RAM | 32GB DDR4 |
-| Storage | 1TB NVMe boot + 1+2TB backup/media storage |
+| Storage | KINGSTON SA400S37480G (SATA 500GB boot/lvm) + ST2000VN004-2E4164 (SATA 2TB backup/media storage |
 | GPU | GTX 1060 — passed through for transcoding |
 | Network | Onboard 1GbE |
 
@@ -64,7 +78,6 @@ Proxmox is installed directly on bare metal and hosts everything below.
 
 ## 📦 Containerized Services (Docker)
 
-Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead and better proxmox integration. Docker is retained for services with complex dependency trees or official Docker-only recommendations.
 
 | Service | Purpose | Runs On |
 |---|---|---|
@@ -82,7 +95,7 @@ docker/
 └── Immich/
     └── docker-compose.yml
 ```
-
+Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead and better proxmox integration. Docker is retained for services with complex dependency trees or official Docker-only recommendations.
 
 ## 🌐 Network
 
@@ -99,7 +112,7 @@ docker/
 
 | Layer | Control |
 |:---|:---|
-| Network segmentation | 1 VLAN to isolate IoT, planned expansion for for server and management traffic |
+| Network segmentation | 1 VLAN to isolate IoT, planned expansion for server and management traffic |
 | Remote access | WireGuard only; no services exposed to the internet |
 | DNS filtering | Pi-hole blocks ads/malware at the network level |
 | Encryption | TLS via Let's Encrypt for internal services; VPN tunnel for remote access |
@@ -132,7 +145,7 @@ Since this is a single point of failure, backups matter more than usual here:
 ## 🛠️ Monitoring
 
 - Grafana + Prometheus for service and resource monitoring
-- Notification method —  Ntfy alerts on service downtime
+- Notification method —  ntfy alerts on service downtime
 
 ---
 
@@ -162,8 +175,8 @@ Since this is a single point of failure, backups matter more than usual here:
 
 ## 📸 Screenshots / Diagram
 
-<img width="1920" height="960" alt="Screenshot 2026-07-19 094937" src="https://github.com/user-attachments/assets/0ef7ed96-d031-4423-91ca-46bb580d9ea6" />
-<img width="1920" height="963" alt="prox_dash" src="https://github.com/user-attachments/assets/1207113c-eec1-4304-acb8-5229a0ba4626" />
-<img width="1920" height="964" alt="homepage" src="https://github.com/user-attachments/assets/b3470baf-151b-4b60-b03f-4aaa0ada8b65" />
-<img width="1920" height="968" alt="grafana" src="https://github.com/user-attachments/assets/7d44e1c9-005b-4808-9088-94202115c88a" />
-<img width="1920" height="959" alt="grafana_2" src="https://github.com/user-attachments/assets/d2df7b17-b993-4a47-86e4-389ae78a7116" />
+<img width="800" height="400" alt="Network Diagram" src="https://github.com/user-attachments/assets/0ef7ed96-d031-4423-91ca-46bb580d9ea6" />
+<img width="800" height="400" alt="Proxmox dashboard showing resource utilization" src="https://github.com/user-attachments/assets/1207113c-eec1-4304-acb8-5229a0ba4626" alt="Proxmox dashboard showing resource utilization" />
+<img width="800" height="400" alt="Browser Homepage for easy service access" src="https://github.com/user-attachments/assets/b3470baf-151b-4b60-b03f-4aaa0ada8b65" />
+<img width="800" height="400" alt="Grafana dashboard showing resource utilization" src="https://github.com/user-attachments/assets/7d44e1c9-005b-4808-9088-94202115c88a" />
+<img width="800" height="400" alt="Grafana dashboard part 2" src="https://github.com/user-attachments/assets/d2df7b17-b993-4a47-86e4-389ae78a7116" />
