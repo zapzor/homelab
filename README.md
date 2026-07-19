@@ -77,8 +77,9 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Mediaserver | LXC | Media server / file storage | Debian |
 | Pi-hole | LXC | DNS filtering | Debian |
 | Postgresql | LXC | SQL Database | Debian
+| Loki | LXC | Log aggregation/SIEM | Debian
 | Docker | LXC | Docker containers | Debian |
-| changedetection | LXC | Monitors websites for changes | Debian |
+| Changedetection | LXC | Monitors websites for changes | Debian |
 | Nginx proxy manager | LXC | Reverse proxy | Debian |
 | Frigate | LXC | CCTV monitoring | Debian |
 | mqtt | LXC | Home automation protocol | Debian |
