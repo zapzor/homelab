@@ -1,25 +1,10 @@
 # 🏠 Homelab
 
-A single-node home lab built on a repurposed PC, running Proxmox as the hypervisor with a mix of VMs, LXC containers, and Docker workloads.
+A single-node home lab built on a repurposed PC, running Proxmox as the hypervisor with a mix of VMs, LXC containers, and Docker workloads. This lab started as a way to self-host services, and has grown into a small self-hosted platform for media, home automation, dev/test, backups, etc..
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen) ![Proxmox](https://img.shields.io/badge/hypervisor-Proxmox%20VE-orange) ![Docker](https://img.shields.io/badge/containers-Docker-blue)
 
 ---
-
-## 📋 Overview
-
-| | |
-|---|---|
-| **Hardware** | 1x repurposed PC |
-| **Hypervisor** | Proxmox VE 9 |
-| **Workloads** | 30+ VMs / LXC containers, Docker inside several |
-| **Network** | TP-Link Archer C7/OpenWrt, TP-Link TLSG105PE  |
-| **Uptime target** | 24x7 |
-
-This lab started as a way to self-host services, and has grown into a small self-hosted platform for media, home automation, dev/test, backups, etc..
-
----
-
 ## 🧠 Some Lessons Learned
 
 Most of this was figured out during setup. Once it works, it tends to keep working, short of a hardware failure (in my experience). Things generally break when you try changing something without first reviewing the documentation.
@@ -32,7 +17,18 @@ Most of this was figured out during setup. Once it works, it tends to keep worki
 
 **Network segmentation** — IoT VLAN wasn't hard to configure, but it was annoying to retrofit after already having a few devices on the main LAN and having to reconfigure some smart home gear. Do the VLANs first.
 
-**Backups** — `vzdump` runs daily. I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. Turns out the network connection dropped mid-transfer. Now I validate backups with checksums before trusting them.
+**Backups** — vzdump runs daily incrementals and weekly fulls. I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. Turns out the network connection dropped mid-transfer. Now I validate backups with checksums before trusting them.=
+
+## 📋 Overview
+
+| | |
+|---|---|
+| **Hardware** | 1x repurposed PC |
+| **Hypervisor** | Proxmox VE 9 |
+| **Workloads** | 30+ VMs / LXC containers, Docker inside several |
+| **Network** | TP-Link Archer C7/OpenWrt, TP-Link TLSG105PE  |
+
+---
 
 ## 🖥️ Hardware
 
@@ -74,7 +70,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Kali | LXC | Pen testing | Kali Linux |
 | Homepage | LXC | Services overview | Debian |
 | Commafeed | LXC | RSS feed | Debian |
-| Windows | VM | Windows Server testing (AD, GPO, RDS) | Windows Server 2022 |
+| Windows | VM | Windows Server testing | Windows Server 2022 |
 
 ## 📦 Containerized Services (Docker)
 
@@ -95,7 +91,7 @@ docker/
 └── Immich/
     └── docker-compose.yml
 ```
-Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead and better proxmox integration. Docker is retained for services with complex dependency trees or official Docker-only recommendations.
+Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead (~50MB of RAM per container) and better proxmox integration. Docker is retained for services with complex dependency trees or official Docker-only recommendations.
 
 ## 🌐 Network
 
@@ -118,7 +114,7 @@ Docker runs inside the dedicated LXC above. Most services were previously runnin
 | Encryption | TLS via Let's Encrypt for internal services; VPN tunnel for remote access |
 | Host hardening | Proxmox web UI restricted to management VLAN; SSH key-based auth, root login disabled |
 
-Running LXC containers with privileged flags (required for some bind mounts) increases attack surface vs. unprivileged containers. Evaluating Proxmox Backup Server as part of recovery hardening.
+Running LXC containers with privileged flags (required for some bind mounts) increases attack surface vs. unprivileged containers, however I'm not especially concerned as this server has no external exposure. That said, I plan on mitigating this regardless by restricting privileged containers to the management VLAN when available. Evaluating Proxmox Backup Server as part of recovery hardening.
 
 ### Reverse Proxy / Access
 
@@ -135,10 +131,10 @@ Since this is a single point of failure, backups matter more than usual here:
 | What | Method | Frequency | Destination |
 |---|---|---|---|
 | VM/LXC snapshots | vzdump | Daily incremental, weekly full; ~250GB total backup set | local disk + cloud |
-| Docker volumes/configs | rsync | Daily | My PC + cloud |
-| Documentation & IaC | Git | On change | GitHub (this repo) |
+| Docker volumes/configs | rsync | Daily | workstation + cloud |
+| Documentation | Git | On change | GitHub (this repo) |
 
-**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from PC. Restore can take up to ~12 hours from cloud, ~1 hour onsite.
+**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from PC. Restore can take ~14 hours from cloud, ~1 hour onsite. Since cloud restores have been unreliable in my experience, I have an rsync cronjob configured which syncs the vzdumps to the cloud with checksum validation. In the event I need to restore from the cloud, I have a local disk I can rsync those vzdumps to, then restore from that disk.
 
 ---
 
@@ -148,20 +144,6 @@ Since this is a single point of failure, backups matter more than usual here:
 - Notification method —  ntfy alerts on service downtime
 
 ---
-
-## 🎯 Skills Demonstrated
-
-| Skill | Experience |
-|:---|:---|
-| Virtualization | Proxmox VE, VMs/LXC, GPU passthrough |
-| Linux | Debian administration, shell scripting, systemd, troubleshooting |
-| Networking | VLANs, OpenWrt, WireGuard, DNS, firewall configuration |
-| Docker | Docker Compose, networking, persistent volumes |
-| Reverse Proxy | Nginx Proxy Manager, TLS, Let's Encrypt |
-| Monitoring | Prometheus, Grafana, ntfy alerts |
-| Backup & Recovery | Proxmox backups, rsync, recovery documentation |
-| Security | Network segmentation, VPN-only access, Pi-hole/Unbound |
-| Hardware | Home server build, storage planning, GPU passthrough |
 
 ## 🗺️ Roadmap
 
@@ -175,8 +157,8 @@ Since this is a single point of failure, backups matter more than usual here:
 
 ## 📸 Screenshots / Diagram
 
-<img width="800" height="400" alt="Network Diagram" src="https://github.com/user-attachments/assets/0ef7ed96-d031-4423-91ca-46bb580d9ea6" />
-<img width="800" height="400" alt="Proxmox dashboard showing resource utilization" src="https://github.com/user-attachments/assets/1207113c-eec1-4304-acb8-5229a0ba4626" alt="Proxmox dashboard showing resource utilization" />
-<img width="800" height="400" alt="Browser Homepage for easy service access" src="https://github.com/user-attachments/assets/b3470baf-151b-4b60-b03f-4aaa0ada8b65" />
-<img width="800" height="400" alt="Grafana dashboard showing resource utilization" src="https://github.com/user-attachments/assets/7d44e1c9-005b-4808-9088-94202115c88a" />
-<img width="800" height="400" alt="Grafana dashboard part 2" src="https://github.com/user-attachments/assets/d2df7b17-b993-4a47-86e4-389ae78a7116" />
+<img width="1000" alt="Network Diagram" src="https://github.com/user-attachments/assets/0ef7ed96-d031-4423-91ca-46bb580d9ea6" />
+<img width="1000" alt="Proxmox dashboard showing resource utilization" src="https://github.com/user-attachments/assets/1207113c-eec1-4304-acb8-5229a0ba4626" />
+<img width="1000" alt="Browser Homepage for easy service access" src="https://github.com/user-attachments/assets/b3470baf-151b-4b60-b03f-4aaa0ada8b65" />
+<img width="1000" alt="Grafana dashboard showing resource utilization" src="https://github.com/user-attachments/assets/7d44e1c9-005b-4808-9088-94202115c88a" />
+<img width="1000" alt="Grafana dashboard part 2" src="https://github.com/user-attachments/assets/d2df7b17-b993-4a47-86e4-389ae78a7116" />
