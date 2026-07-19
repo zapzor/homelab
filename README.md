@@ -145,6 +145,22 @@ Since this is a single point of failure, backups matter more than usual here:
 
 ---
 
+## 🎯 Skills Demonstrated
+
+| Skill | Experience |
+|:---|:---|
+| Virtualization | Proxmox VE, VMs/LXC, GPU passthrough |
+| Linux | Debian administration, shell scripting, systemd, troubleshooting |
+| Networking | VLANs, OpenWrt, WireGuard, DNS, firewall configuration |
+| Docker | Docker Compose, networking, persistent volumes |
+| Reverse Proxy | Nginx Proxy Manager, TLS, Let's Encrypt |
+| Monitoring | Prometheus, Grafana, ntfy alerts |
+| Backup & Recovery | Proxmox backups, rsync, recovery documentation |
+| Security | Network segmentation, VPN-only access, Pi-hole/Unbound |
+| Hardware | Home server build, storage planning, GPU passthrough |
+
+---
+
 ## 🗺️ Roadmap
 
 - [ ] Add Proxmox Backup Server
@@ -155,7 +171,7 @@ Since this is a single point of failure, backups matter more than usual here:
 
 ---
 
-## 📸 Screenshots / Diagram
+## 📸 Network Diagram / Screenshots
 
 <img width="1000" alt="Network Diagram" src="https://github.com/user-attachments/assets/0ef7ed96-d031-4423-91ca-46bb580d9ea6" />
 <img width="1000" alt="Proxmox dashboard showing resource utilization" src="https://github.com/user-attachments/assets/1207113c-eec1-4304-acb8-5229a0ba4626" />
