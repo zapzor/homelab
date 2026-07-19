@@ -64,7 +64,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 
 ## 📦 Containerized Services (Docker)
 
-Docker runs inside dedicated VMs/LXCs above (not directly on the Proxmox host, keeping the hypervisor clean).
+Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead and better proxmox integration. Docker is retained for services with complex dependency trees or official Docker-only recommendations.
 
 | Service | Purpose | Runs On |
 |---|---|---|
@@ -126,18 +126,18 @@ Since this is a single point of failure, backups matter more than usual here:
 
 ## 🎯 Skills Demonstrated
 
-| Skill | Evidence in This Lab |
+| Skill | Experience |
 |:---|:---|
-| **Virtualization** | Proxmox VE bare-metal hypervisor, VM/LXC provisioning, GPU passthrough (GTX 1060), resource allocation |
-| **Linux Administration** | Debian-based LXC containers, package management, shell scripting, systemd services, log troubleshooting |
-| **Networking** | VLAN segmentation (IoT), OpenWrt router/firewall config, WireGuard VPN, DNS (Pi-hole + Unbound), TCP/IP troubleshooting |
-| **Containerization** | Docker Compose workloads, container networking, volume management, image updates |
-| **Reverse Proxy & Web Services** | Nginx Proxy Manager, TLS termination, Let's Encrypt DNS challenges, internal service exposure |
-| **Monitoring & Observability** | Prometheus metrics collection, Grafana dashboards, Ntfy alerting on service downtime |
-| **Backup & Disaster Recovery** | vzdump scheduling, rsync automation, offsite/cloud replication, documented RTO/RPO, recovery runbooks |
-| **Security & Hardening** | Network segmentation, zero external exposure policy, DNS-based ad/malware filtering, VPN-only remote access |
-| **Infrastructure as Code** | Git-tracked configs, Docker Compose files, version-controlled documentation |
-| **Hardware & Systems** | Repurposed PC build, storage planning (NVMe + HDD tiering), GPU passthrough configuration |
+| Virtualization | Proxmox VE, VMs/LXC, GPU passthrough |
+| Linux | Debian administration, shell scripting, systemd, troubleshooting |
+| Networking | VLANs, OpenWrt, WireGuard, DNS, firewall configuration |
+| Docker | Docker Compose, networking, persistent volumes |
+| Reverse Proxy | Nginx Proxy Manager, TLS, Let's Encrypt |
+| Monitoring | Prometheus, Grafana, ntfy alerts |
+| Backup & Recovery | Proxmox backups, rsync, recovery documentation |
+| Security | Network segmentation, VPN-only access, Pi-hole/Unbound |
+| Infrastructure as Code | Git-tracked configs and Docker Compose |
+| Hardware | Home server build, storage planning, GPU passthrough |
 
 ## 🗺️ Roadmap
 
