@@ -93,6 +93,8 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Commafeed | LXC | RSS feed | Debian |
 | Windows | VM | Windows Server 2022 — planned AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
 
+*Rest hidden for brevity*
+
 ---
 
 ## 📦 Containerized Services (Docker)
