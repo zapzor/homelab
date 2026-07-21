@@ -88,25 +88,25 @@ Proxmox is installed directly on bare metal and hosts everything below.
 
 | Name | Type | Purpose | OS |
 |---|---|---|---|
-| Wireguard | LXC | VPN | Debian |
-| Mediaserver | LXC | Media server / file storage | Debian |
-| Pi-hole | LXC | DNS filtering | Debian |
-| Postgresql | LXC | SQL Database | Debian
-| Loki | LXC | Log aggregation/SIEM | Debian
-| Docker | LXC | Docker containers | Debian |
-| Changedetection | LXC | Monitors websites for changes | Debian |
-| Nginx proxy manager | LXC | Reverse proxy | Debian |
-| Frigate | LXC | CCTV monitoring | Debian |
-| mqtt | LXC | Home automation protocol | Debian |
-| Calibre Web | LXC | Calibre Web | Debian |
-| Home Assistant | VM | Home automation platform | HAOS |
-| Grafana | LXC | Data visualization | Debian |
-| Invidious | LXC | Youtube frontend | Debian |
-| Prometheus | LXC | Event monitoring | Debian |
-| Kali | LXC | Pen testing | Kali Linux |
-| Homepage | LXC | Services overview | Debian |
-| Commafeed | LXC | RSS feed | Debian |
-| Windows | VM | Windows Server 2022 — planned AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
+| **Wireguard** | LXC | VPN | Debian |
+| **Mediaserver** | LXC | Media server / file storage | Debian |
+| **Pi-hole** | LXC | DNS filtering | Debian |
+| **Postgresql** | LXC | SQL Database | Debian
+| **Loki** | LXC | Log aggregation/SIEM | Debian
+| **Docker** | LXC | Docker containers | Debian |
+| **Changedetection** | LXC | Monitors websites for changes | Debian |
+| **Nginx proxy manager** | LXC | Reverse proxy | Debian |
+| **Frigate** | LXC | CCTV monitoring | Debian |
+| **mqtt** | LXC | Home automation protocol | Debian |
+| **Calibre Web** | LXC | Calibre Web | Debian |
+| **Home Assistant** | VM | Home automation platform | HAOS |
+| **Grafana** | LXC | Data visualization | Debian |
+| **Invidious** | LXC | Youtube frontend | Debian |
+| **Prometheus** | LXC | Event monitoring | Debian |
+| **Kali** | LXC | Pen testing | Kali Linux |
+| **Homepage** | LXC | Services overview | Debian |
+| **Commafeed** | LXC | RSS feed | Debian |
+| **Windows** | VM | Windows Server 2022 — AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
 
 *Rest hidden for brevity*
 
@@ -152,11 +152,11 @@ Docker runs inside the dedicated LXC above. Most services were previously runnin
 
 | Layer | Control |
 |:---|:---|
-| Network segmentation | 1 VLAN to isolate IoT, planned expansion for server and management traffic |
-| Remote access | WireGuard only; no services exposed to the internet |
-| DNS filtering | Pi-hole blocks ads/malware at the network level |
-| Encryption | TLS via Let's Encrypt for internal services; VPN tunnel for remote access |
-| Host hardening | Proxmox web UI restricted to management VLAN; SSH key-based auth, root login disabled |
+| **Network segmentation** | 1 VLAN to isolate IoT, planned expansion for server and management traffic |
+| **Remote access** | WireGuard only; no services exposed to the internet |
+| **DNS filtering** | Pi-hole blocks ads/malware at the network level |
+| **Encryption** | TLS via Let's Encrypt for internal services; VPN tunnel for remote access |
+| **Host hardening** | Proxmox web UI restricted to management VLAN; SSH key-based auth, root login disabled |
 
 Running LXC containers with privileged flags (required for some bind mounts) increases attack surface vs. unprivileged containers. While the attack surface is reduced by VPN-only access, I still plan to minimize privileged containers as a defense-in-depth measure. Evaluating Proxmox Backup Server as part of recovery hardening.
 
@@ -174,9 +174,9 @@ Since this is a single point of failure, backups matter more than usual here:
 
 | What | Method | Frequency | Destination |
 |---|---|---|---|
-| VM/LXC snapshots | vzdump | daily, weekly; ~250GB total backup set | local disk + cloud |
-| Docker volumes/configs | rsync | Daily | workstation + cloud |
-| Documentation | Git | On change | GitHub (this repo) |
+| **VM/LXC snapshots** | vzdump | daily, weekly; ~250GB total backup set | local disk + cloud |
+| **Docker volumes/configs** | rsync | Daily | workstation + cloud |
+| **Documentation** | Git | On change | GitHub (this repo) |
 
 **Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from workstation. Restore can take ~14 hours from cloud, ~1 hour onsite. My "cloud" is a old laptop with a 2TB disk, hosted offsite. Since cloud restores have been unreliable in my experience, I have an rsync cronjob configured which syncs the vzdumps to the cloud with checksum validation. In the event I need to restore from the cloud, I have a local disk I can rsync those vzdumps to, then restore from that disk.
 
@@ -193,8 +193,8 @@ Since this is a single point of failure, backups matter more than usual here:
 
 | Goal | Priority | Blocker |
 |---|---|---|
-| Proxmox Backup Server | Medium | Need another server |
-| Automate backup testing | Medium | PBS deployment |
+| Proxmox Backup Server | High | Need another server |
+| Automate backup testing | High | PBS deployment |
 | VLAN-isolated DNS | Low | Need another switch |
 | Separate server VLAN | Low | Need another switch |
 
