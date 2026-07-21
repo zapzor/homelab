@@ -36,15 +36,30 @@ Most of this was figured out during setup. Once it works, it tends to keep worki
 
 | Skill | Experience |
 |:---|:---|
-| Virtualization | Proxmox VE, VMs/LXC, GPU passthrough |
-| Linux | Debian administration, shell scripting, systemd, troubleshooting |
-| Networking | VLANs, OpenWrt, WireGuard, DNS, firewall configuration |
-| Docker | Docker Compose, networking, persistent volumes |
-| Reverse Proxy | Nginx Proxy Manager, TLS, Let's Encrypt |
-| Monitoring | Prometheus, Grafana, ntfy alerts |
-| Backup & Recovery | Proxmox backups, rsync, recovery documentation |
-| Security | Network segmentation, VPN-only access, Pi-hole/Unbound |
-| Hardware | Home server build, storage planning, GPU passthrough |
+| **Virtualization** | Proxmox VE, VMs/LXC, GPU passthrough |
+| **Linux** | Debian administration, shell scripting, systemd, troubleshooting |
+| **Networking** | VLANs, OpenWrt, WireGuard, DNS, firewall configuration |
+| **Docker** | Docker Compose, networking, persistent volumes |
+| **Reverse Proxy** | Nginx Proxy Manager, TLS, Let's Encrypt |
+| **Monitoring** | Prometheus, Grafana, ntfy alerts |
+| **Backup & Recovery* | Proxmox backups, rsync, recovery documentation |
+| **Security** | Network segmentation, VPN-only access, Pi-hole/Unbound |
+| **Hardware** | Home server build, storage planning, GPU passthrough |
+
+## 🎯 Skills Demonstrated
+
+| Area | Experience |
+|---|---|
+| **Virtualization & Compute Infrastructure** | Proxmox VE, virtual machine and LXC lifecycle management, PCI/GPU passthrough |
+| **Linux Systems Administration** | Debian administration, shell scripting, systemd service management, troubleshooting |
+| **Network Engineering & Security** | VLAN segmentation, routing, firewall configuration, OpenWrt, WireGuard VPN, DNS infrastructure |
+| **Containerization & Application Deployment** | Docker, Docker Compose, container networking, persistent storage management |
+| **Application Delivery & TLS Management** | Reverse proxy configuration, HTTPS/TLS certificate automation, internal service publishing |
+| **Observability & Monitoring** | Metrics collection, dashboards, alerting workflows, log aggregation |
+| **Backup & Disaster Recovery** | Automated backups, replication, restore testing, recovery documentation |
+| **Infrastructure Security & Hardening** | Network isolation, secure remote access, DNS security controls, service hardening |
+| **Hardware & Capacity Planning** | Server deployment, storage planning, hardware optimization, GPU passthrough |
+
 
 ---
 
