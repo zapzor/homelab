@@ -1,23 +1,9 @@
 # 🏠 Homelab
 
-A single-node home lab built on a repurposed PC, running Proxmox as the hypervisor with a mix of VMs, LXC containers, and Docker workloads. This lab started as a way to self-host services, and has grown into a small self-hosted platform for media, home automation, dev/test, backups, etc..
+A single-node home lab built from a repurposed PC, grown from a few self-hosted services into a platform for learning Linux system administration, networking, and infrastructure automation. Runs on Proxmox VE with VLAN segmentation, automated backup validation, and VPN-secured remote access.
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen) ![Proxmox](https://img.shields.io/badge/hypervisor-Proxmox%20VE-orange) ![Docker](https://img.shields.io/badge/containers-Docker-blue)
-
----
-## 🧠 Some Lessons Learned
-
-Most of this was figured out during setup. Once it works, it tends to keep working, short of a hardware failure (in my experience). Things generally break when you try changing something without first reviewing the documentation.
-
-**Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. Moved them to LXC. Kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
-
-**GPU passthrough** — I needed gpu passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI didn't mention this at the time, so from that I learned to prefer doing things through the command line for better feedback.
-
-**Storage** — Initially, I used a 150GB drive for the boot drive, thinking it would be sufficient. But as the number of services grew, I realised I would need more storage. I upgraded to a larger SSD a few months later. Should have planned for 2–3x from the start.
-
-**Network segmentation** — IoT VLAN wasn't hard to configure, but it was annoying to retrofit after already having a few devices on the main LAN and having to reconfigure some smart home gear. Do the VLANs first.
-
-**Backups** — vzdump runs daily incrementals and weekly fulls. I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. Turns out the network connection dropped mid-transfer. Now I validate backups with checksums before trusting them.
+<img width="1000" alt="Proxmox dashboard showing resource utilization" src="https://github.com/user-attachments/assets/1207113c-eec1-4304-acb8-5229a0ba4626" />
 
 ---
 
@@ -42,24 +28,25 @@ Most of this was figured out during setup. Once it works, it tends to keep worki
 | **Docker** | Docker Compose, networking, persistent volumes |
 | **Reverse Proxy** | Nginx Proxy Manager, TLS, Let's Encrypt |
 | **Monitoring** | Prometheus, Grafana, ntfy alerts |
-| **Backup & Recovery* | Proxmox backups, rsync, recovery documentation |
+| **Backup & Recovery** | Proxmox backups, rsync, recovery documentation |
 | **Security** | Network segmentation, VPN-only access, Pi-hole/Unbound |
 | **Hardware** | Home server build, storage planning, GPU passthrough |
 
-## 🎯 Skills Demonstrated
+---
 
-| Area | Experience |
-|---|---|
-| **Virtualization & Compute Infrastructure** | Proxmox VE, virtual machine and LXC lifecycle management, PCI/GPU passthrough |
-| **Linux Systems Administration** | Debian administration, shell scripting, systemd service management, troubleshooting |
-| **Network Engineering & Security** | VLAN segmentation, routing, firewall configuration, OpenWrt, WireGuard VPN, DNS infrastructure |
-| **Containerization & Application Deployment** | Docker, Docker Compose, container networking, persistent storage management |
-| **Application Delivery & TLS Management** | Reverse proxy configuration, HTTPS/TLS certificate automation, internal service publishing |
-| **Observability & Monitoring** | Metrics collection, dashboards, alerting workflows, log aggregation |
-| **Backup & Disaster Recovery** | Automated backups, replication, restore testing, recovery documentation |
-| **Infrastructure Security & Hardening** | Network isolation, secure remote access, DNS security controls, service hardening |
-| **Hardware & Capacity Planning** | Server deployment, storage planning, hardware optimization, GPU passthrough |
+## 🧠 Some Lessons Learned
 
+Most of this was figured out during setup. Once it works, it tends to keep working, short of a hardware failure (in my experience). Things generally break when you try changing something without first reviewing the documentation.
+
+**Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. Moved them to LXC. Kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
+
+**GPU passthrough** — I needed gpu passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI didn't mention this at the time, so from that I learned to prefer doing things through the command line for better feedback.
+
+**Storage** — Initially, I used a 150GB drive for the boot drive, thinking it would be sufficient. But as the number of services grew, I realised I would need more storage. I upgraded to a larger SSD a few months later. Should have planned for 2–3x from the start.
+
+**Network segmentation** — IoT VLAN wasn't hard to configure, but it was annoying to retrofit after already having a few devices on the main LAN and having to reconfigure some smart home gear. Do the VLANs first.
+
+**Backups** — vzdump runs daily incrementals and weekly fulls. I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. Turns out the network connection dropped mid-transfer. Now I validate backups with checksums before trusting them.
 
 ---
 
@@ -97,18 +84,12 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Changedetection** | LXC | Monitors websites for changes | Debian |
 | **Nginx proxy manager** | LXC | Reverse proxy | Debian |
 | **Frigate** | LXC | CCTV monitoring | Debian |
-| **mqtt** | LXC | Home automation protocol | Debian |
-| **Calibre Web** | LXC | Calibre Web | Debian |
 | **Home Assistant** | VM | Home automation platform | HAOS |
 | **Grafana** | LXC | Data visualization | Debian |
-| **Invidious** | LXC | Youtube frontend | Debian |
 | **Prometheus** | LXC | Event monitoring | Debian |
 | **Kali** | LXC | Pen testing | Kali Linux |
-| **Homepage** | LXC | Services overview | Debian |
-| **Commafeed** | LXC | RSS feed | Debian |
 | **Windows** | VM | Windows Server 2022 — AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
 
-*Rest hidden for brevity*
 
 ---
 
@@ -121,16 +102,6 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Redlib | Reddit frontend | Docker |
 | Immich | Photo backup | Docker |
 
-Compose files are organized as:
-```
-docker/
-├── joplin_server/
-│   └── docker-compose.yml
-├── redlib/
-│   └── docker-compose.yml
-└── immich/
-    └── docker-compose.yml
-```
 Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead (~50MB of RAM per container) and better proxmox integration. Docker is retained for services with complex dependency trees or official Docker-only recommendations.
 
 ---
@@ -195,6 +166,7 @@ Since this is a single point of failure, backups matter more than usual here:
 |---|---|---|
 | Proxmox Backup Server | High | Need another server |
 | Automate backup testing | High | PBS deployment |
+| Ansible automation | Medium | Learning Ansible |
 | VLAN-isolated DNS | Low | Need another switch |
 | Separate server VLAN | Low | Need another switch |
 
@@ -203,7 +175,5 @@ Since this is a single point of failure, backups matter more than usual here:
 ## 📸 Network Diagram / Screenshots
 
 <img width="1000" alt="Network Diagram" src="https://github.com/user-attachments/assets/0ef7ed96-d031-4423-91ca-46bb580d9ea6" />
-<img width="1000" alt="Proxmox dashboard showing resource utilization" src="https://github.com/user-attachments/assets/1207113c-eec1-4304-acb8-5229a0ba4626" />
-<img width="1000" alt="Browser Homepage for easy service access" src="https://github.com/user-attachments/assets/b3470baf-151b-4b60-b03f-4aaa0ada8b65" />
 <img width="1000" alt="Grafana dashboard showing resource utilization" src="https://github.com/user-attachments/assets/7d44e1c9-005b-4808-9088-94202115c88a" />
 <img width="1000" alt="Grafana dashboard part 2" src="https://github.com/user-attachments/assets/d2df7b17-b993-4a47-86e4-389ae78a7116" />
