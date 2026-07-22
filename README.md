@@ -13,7 +13,7 @@ A single-node home lab built from a repurposed PC, grown from a few self-hosted 
 |---|---|
 | **Hardware** | 1x repurposed PC |
 | **Hypervisor** | Proxmox VE 9 |
-| **Workloads** | 30+ VMs / LXC containers, Docker inside several |
+| **Workloads** | 25+ VMs / LXC containers, Docker inside several |
 | **Network** | TP-Link Archer C7/OpenWrt, TP-Link TLSG105PE  |
 
 ---
@@ -99,7 +99,6 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Service | Purpose | Runs On |
 |---|---|---|
 | Joplin server | Note sync | Docker |
-| Redlib | Reddit frontend | Docker |
 | Immich | Photo backup | Docker |
 
 Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead (~50MB of RAM per container) and better proxmox integration. Docker is retained for services with complex dependency trees or official Docker-only recommendations.
