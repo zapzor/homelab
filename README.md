@@ -3,7 +3,9 @@
 A single-node home lab built from a repurposed PC, grown from a few self-hosted services into a platform for learning Linux system administration, networking, and infrastructure automation. Runs on Proxmox VE with VLAN segmentation, automated backup validation, and VPN-secured remote access.
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen) ![Proxmox](https://img.shields.io/badge/hypervisor-Proxmox%20VE-orange) ![Docker](https://img.shields.io/badge/containers-Docker-blue)
-<img width="1000" alt="Proxmox dashboard showing resource utilization" src="https://github.com/user-attachments/assets/1207113c-eec1-4304-acb8-5229a0ba4626" />
+<img width="1000" alt="proxmox_metrics" src="https://github.com/user-attachments/assets/1207113c-eec1-4304-acb8-5229a0ba4626" />
+
+
 
 ---
 
@@ -174,5 +176,6 @@ Since this is a single point of failure, backups matter more than usual here:
 ## 📸 Network Diagram / Screenshots
 
 <img width="1000" alt="Network Diagram" src="https://github.com/user-attachments/assets/0ef7ed96-d031-4423-91ca-46bb580d9ea6" />
+<img width="1000" alt="proxmox_metrics" src="https://github.com/user-attachments/assets/f1e1c7dc-a786-48b4-91de-a02548d85263" />
 <img width="1000" alt="Grafana dashboard showing resource utilization" src="https://github.com/user-attachments/assets/7d44e1c9-005b-4808-9088-94202115c88a" />
 <img width="1000" alt="Grafana dashboard part 2" src="https://github.com/user-attachments/assets/d2df7b17-b993-4a47-86e4-389ae78a7116" />
