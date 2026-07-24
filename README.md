@@ -59,7 +59,7 @@ Repurposed PC:
 |---|---|
 | CPU | i5-6400 |
 | RAM | 32GB DDR4 |
-| Storage | KINGSTON SA400S37480G (SATA 500GB boot/lvm) + ST2000VN004-2E4164 (SATA 2TB backup/media storage) |
+| Storage | KINGSTON SA400S37480G (SATA 500GB, boot/host/workloads, LVM-thin) + ST2000VN004-2E4164 (SATA 2TB, data storage, ZFS) |
 | GPU | GTX 1060 — passed through for transcoding |
 | Network | Onboard 1GbE |
 
@@ -69,9 +69,9 @@ Repurposed PC:
 
 Proxmox is installed directly on bare metal and hosts everything below.
 
-- **Storage backend:** LVM-thin / directory
+- **Storage backend:** LVM-thin / directory + ZFS
 - **Networking:** Linux bridge — see [Network](#-network)
-- **Backup method:** vzdump to internal and external (off premise) drive
+- **Backup method:** vzdump to internal and external (off premise) drive - see [Backups & Disaster Recovery](#-backups--disaster-recovery)
 
 ### VMs & LXC Containers
 
@@ -90,6 +90,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Prometheus** | LXC | Event monitoring | Debian |
 | **Kali** | LXC | Pen testing | Debian |
 | **Ansible** | LXC | Ansible controller | Debian |
+| **Proxmox Backup Server** | LXC | Backup platform | Debian |
 | **Windows** | VM | Windows Server 2022 — AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
 | **Home Assistant** | VM | Home automation platform | HAOS |
 
@@ -143,15 +144,17 @@ Running LXC containers with privileged flags (required for some bind mounts) inc
 
 ## 💾 Backups & Disaster Recovery
 
-Since this is a single point of failure, backups matter more than usual here:
-
 | What | Method | Frequency | Destination |
 |---|---|---|---|
 | **VM/LXC snapshots** | vzdump | daily, weekly; ~250GB total backup set | local disk + cloud |
 | **Docker volumes/configs** | rsync | Daily | workstation + cloud |
 | **Documentation** | Git | On change | GitHub (this repo) |
 
-**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from workstation. Restore can take ~14 hours from cloud, ~1 hour onsite. My "cloud" is a old laptop with a 2TB disk, hosted offsite. Since cloud restores have been unreliable in my experience, I have an rsync cronjob configured which syncs the vzdumps to the cloud with checksum validation. In the event I need to restore from the cloud, I have a local disk I can rsync those vzdumps to, then restore from that disk.
+**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from workstation. Restore can take ~14 hours from cloud, ~1 hour onsite. 
+
+Local backups are managed through Proxmox Backup Server (PBS). PBS has some advantages over a standard disk backup, such as automated deduplication, backup validation, and improved retention management, among other things. 
+
+My "cloud" is a old laptop with a 2TB disk, hosted offsite. Since cloud restores have been unreliable in my experience, I have an rsync cronjob configured which syncs the vzdumps to the cloud with checksum validation. In the event I need to restore from the cloud, I have a local disk I can rsync those vzdumps to, then restore from that disk.
 
 ---
 
@@ -166,9 +169,8 @@ Since this is a single point of failure, backups matter more than usual here:
 
 | Goal | Priority | Blocker |
 |---|---|---|
-| Proxmox Backup Server | High | Need another server |
-| Automate backup testing | High | PBS deployment |
-| Ansible automation | Medium | Learning Ansible |
+| Ansible automation/IaC | High | Learning Ansible |
+| Another node for backups | Medium | Another server |
 | More VLANs | Low | Need another managed switch |
 | K3s instance | Low | Migrating Docker and configuring K3s |
 
