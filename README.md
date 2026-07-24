@@ -168,8 +168,8 @@ Since this is a single point of failure, backups matter more than usual here:
 | Proxmox Backup Server | High | Need another server |
 | Automate backup testing | High | PBS deployment |
 | Ansible automation | Medium | Learning Ansible |
-| VLAN-isolated DNS | Low | Need another switch |
-| Separate server VLAN | Low | Need another switch |
+| More VLANs | Low | Need another managed switch |
+| K3s instance | Low | Migrating Docker and configuring K3s |
 
 ---
 
