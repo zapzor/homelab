@@ -86,11 +86,12 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Changedetection** | LXC | Monitors websites for changes | Debian |
 | **Nginx proxy manager** | LXC | Reverse proxy | Debian |
 | **Frigate** | LXC | CCTV monitoring | Debian |
-| **Home Assistant** | VM | Home automation platform | HAOS |
 | **Grafana** | LXC | Data visualization | Debian |
 | **Prometheus** | LXC | Event monitoring | Debian |
-| **Kali** | LXC | Pen testing | Kali Linux |
+| **Kali** | LXC | Pen testing | Debian |
+| **Ansible** | LXC | Ansible controller | Debian |
 | **Windows** | VM | Windows Server 2022 — AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
+| **Home Assistant** | VM | Home automation platform | HAOS |
 
 
 ---
