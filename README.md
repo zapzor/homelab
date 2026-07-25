@@ -146,15 +146,15 @@ Running LXC containers with privileged flags (required for some bind mounts) inc
 
 | What | Method | Frequency | Destination |
 |---|---|---|---|
-| **VM/LXC snapshots** | vzdump | daily, weekly; ~250GB total backup set | local disk + cloud |
+| **VM/LXC snapshots** | vzdump | daily, weekly, monthly; ~250GB total backup set | local disk + cloud |
 | **Docker volumes/configs** | rsync | Daily | workstation + cloud |
 | **Documentation** | Git | On change | GitHub (this repo) |
 
 **Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from workstation. Restore can take ~14 hours from cloud, ~1 hour onsite. 
 
-Local backups are managed through Proxmox Backup Server (PBS). PBS has some advantages over a standard disk backup, such as automated deduplication, backup validation, and improved retention management, among other things. 
+Local backups are managed through Proxmox Backup Server (PBS). PBS has some advantages over a standard disk backup, such as deduplication, backup validation, and improved retention management. 
 
-My "cloud" is a old laptop with a 2TB disk, hosted offsite. Since cloud restores have been unreliable in my experience, I have an rsync cronjob configured which syncs the vzdumps to the cloud with checksum validation. In the event I need to restore from the cloud, I have a local disk I can rsync those vzdumps to, then restore from that disk.
+I then sync these backups to an S3 instance on AWS, using PBS. I previously synced them to a server hosted at another residence, but I wanted to get some experience with AWS and PBS offers a built in S3 API, so this seemed like a good opportunity to do so. Depending on the costing, I may switch to a cheaper provider, or go back to my previous offsite self-hosted strategy.
 
 ---
 
