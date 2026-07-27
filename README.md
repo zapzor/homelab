@@ -38,17 +38,17 @@ A single-node home lab built from a repurposed PC, grown from a few self-hosted 
 
 ## 🧠 Some Lessons Learned
 
-Most of this was figured out during setup. Once it works, it tends to keep working, short of a hardware failure (in my experience). Things generally break when you try changing something without first reviewing the documentation.
+Most of this was figured out during the initial setup. Once it works, it tends to keep working, short of a hardware failure or trying to change or upgrade something. 
 
 **Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. Moved them to LXC. Kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
 
 **GPU passthrough** — I needed gpu passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI didn't mention this at the time, so from that I learned to prefer doing things through the command line for better feedback.
 
-**Storage** — Initially, I used a 150GB drive for the boot drive, thinking it would be sufficient. But as the number of services grew, I realised I would need more storage. I upgraded to a larger SSD a few months later. Should have planned for 2–3x from the start.
+**Storage** — Initially, I used a 125GB drive for the boot drive, thinking it would be sufficient. But as the number of services grew, I realised I would need more storage. I upgraded to a larger SSD a few months later. Should have planned for 2–3x from the start.
 
-**Network segmentation** — IoT VLAN wasn't hard to configure, but it was annoying to retrofit after already having a few devices on the main LAN and having to reconfigure some smart home gear. Do the VLANs first.
+**Network segmentation** — IoT VLAN wasn't very hard to configure, but it was annoying to retrofit after already having a few devices on the main LAN and having to reconfigure some smart home gear. So I try to do VLANs first now.
 
-**Backups** — vzdump runs daily incrementals and weekly fulls. I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. Turns out the network connection dropped mid-transfer. Now I validate backups with checksums before trusting them.
+**Backups** — I use vzdump for my backups, with dailies, weeklies, and monthlies. I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. The network connection dropped mid-transfer. Since then, I validate backups with checksums before trusting them.
 
 ---
 
@@ -105,7 +105,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Joplin server | Note sync | Docker |
 | Immich | Photo backup | Docker |
 
-Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead (~50MB of RAM per container) and better proxmox integration. Docker is retained for services with complex dependency trees or official Docker-only recommendations.
+Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead (~50MB of RAM per container) and better proxmox integration. Docker is retained for services with complex dependencies or official Docker-only recommendations.
 
 ---
 
@@ -132,7 +132,7 @@ Docker runs inside the dedicated LXC above. Most services were previously runnin
 | **Encryption** | TLS via Let's Encrypt for internal services; VPN tunnel for remote access |
 | **Host hardening** | Proxmox web UI restricted to management VLAN; SSH key-based auth, root login disabled |
 
-Running LXC containers with privileged flags (required for some bind mounts) increases attack surface vs. unprivileged containers. While the attack surface is reduced by VPN-only access, I still plan to minimize privileged containers as a defense-in-depth measure. Evaluating Proxmox Backup Server as part of recovery hardening.
+Running LXC containers with privileged flags (required for some bind mounts) does increase attack surface vs. unprivileged containers. While the attack surface is reduced by VPN-only access, I still minimize privileged containers as a defense-in-depth measure.
 
 ### Reverse Proxy / Access
 
@@ -160,8 +160,8 @@ I then sync these backups to an S3 instance on AWS, using PBS. I previously sync
 
 ## 🛠️ Monitoring
 
-- Grafana + Prometheus for service and resource monitoring
-- Notification method —  ntfy alerts on service downtime
+- Prometheus and Loki + Grafana for service, logs, and resource monitoring. They alert me of things like storage capacity, CPU temperature and broken services.
+- Notification method — Amazon SES (SMTP server). I previously used ntfy to push notifications to Telegram, but since I wanted AWS experience, I switched to SES. Depending on the costs...
 
 ---
 
