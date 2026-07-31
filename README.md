@@ -40,13 +40,13 @@ A single-node home lab built from a repurposed PC, grown from a few self-hosted 
 
 Most of this was figured out during the initial setup. Once it works, it tends to keep working, short of a hardware failure or trying to change or upgrade something. 
 
-**Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. Moved them to LXC. Kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
+**Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. LXC also had better proxmox integration and less overhead. Moved them to LXC. Kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
 
 **GPU passthrough** — I needed gpu passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI didn't mention this at the time, so from that I learned to prefer doing things through the command line for better feedback.
 
 **Storage** — Initially, I used a 125GB drive for the boot drive, thinking it would be sufficient. But as the number of services grew, I realised I would need more storage. I upgraded to a larger SSD a few months later. Should have planned for 2–3x from the start.
 
-**Network segmentation** — IoT VLAN wasn't very hard to configure, but it was annoying to retrofit after already having a few devices on the main LAN and having to reconfigure some smart home gear. So I try to do VLANs first now.
+**Logs** — Before I started using Linux, most of my technical problem solving was just googling things like "internet broken". However, since Linux exposes more information than Windows, I've learnt to check the logs before searching online. A lot of the time they're self-describing and the issue is immediately obvious. If not, having a detailed error log to search for troubleshooting steps is much easier than a vague google search. So now I always check the logs before resorting to google.
 
 **Backups** — I use vzdump for my backups, with dailies, weeklies, and monthlies. I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. The network connection dropped mid-transfer. Since then, I validate backups with checksums before trusting them.
 
@@ -91,6 +91,8 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Kali** | LXC | Pen testing | Debian |
 | **Ansible** | LXC | Ansible controller | Debian |
 | **Proxmox Backup Server** | LXC | Backup platform | Debian |
+| **Infisical** | LXC | Secrets management | Debian |
+| **Authelia** | LXC | SSO (single sign-on) | Debian |
 | **Windows** | VM | Windows Server 2022 — AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
 | **Home Assistant** | VM | Home automation platform | HAOS |
 
@@ -116,7 +118,7 @@ Docker runs inside the dedicated LXC above. Most services were previously runnin
 | **Router/Firewall** | OpenWrt |
 | **Switch** | Managed, TLSG105PE |
 | **Wi-Fi** | Archer C7 Router, Deco Mesh M4 AP  |
-| **VLANs** | 1 VLAN to isolate IoT, planned expansion for server and management traffic |
+| **VLANs** | 2 VLANs, one for IoT and another for management traffic. |
 | **DNS/Ad-blocking** | Pi-hole, running as LXC above |
 | **Remote access** | WireGuard |
 
@@ -126,13 +128,15 @@ Docker runs inside the dedicated LXC above. Most services were previously runnin
 
 | Layer | Control |
 |:---|:---|
-| **Network segmentation** | 1 VLAN to isolate IoT, planned expansion for server and management traffic |
+| **Network segmentation** | 4 VLANs to isolate IoT, Guest, Management, and Main traffic |
 | **Remote access** | WireGuard only; no services exposed to the internet |
 | **DNS filtering** | Pi-hole blocks ads/malware at the network level |
 | **Encryption** | TLS via Let's Encrypt for internal services; VPN tunnel for remote access |
 | **Host hardening** | Proxmox web UI restricted to management VLAN; SSH key-based auth, root login disabled |
 
 Running LXC containers with privileged flags (required for some bind mounts) does increase attack surface vs. unprivileged containers. While the attack surface is reduced by VPN-only access, I still minimize privileged containers as a defense-in-depth measure.
+
+I also use an SSO service, Authelia, for MFA support and making tracking login details easier.
 
 ### Reverse Proxy / Access
 
@@ -169,9 +173,8 @@ I then sync these backups to an S3 instance on AWS, using PBS. I previously sync
 
 | Goal | Priority | Blocker |
 |---|---|---|
-| Ansible automation/IaC | High | Learning Ansible |
+| IaC | High | Learning Ansible and Terraform |
 | Another node for backups | Medium | Another server |
-| More VLANs | Low | Need another managed switch |
 | K3s instance | Low | Migrating Docker and configuring K3s |
 
 ---
