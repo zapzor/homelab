@@ -16,7 +16,7 @@ A single-node home lab built from a repurposed PC, grown from a few self-hosted 
 | **Hardware** | 1x repurposed PC |
 | **Hypervisor** | Proxmox VE 9 |
 | **Workloads** | 25+ VMs / LXC containers, Docker inside several |
-| **Network** | TP-Link Archer C7/OpenWrt, TP-Link TLSG105PE  |
+| **Network** | TP-Link Archer C7/OpenWrt, TP-Link TLSG105PE, 3x Deco Mesh M4/OpenWrt  |
 
 ---
 
@@ -75,25 +75,37 @@ Proxmox is installed directly on bare metal and hosts everything below.
 
 ### VMs & LXC Containers
 
+
+**Infrastructure:**
 | Name | Type | Purpose | OS |
 |---|---|---|---|
 | **Wireguard** | LXC | VPN | Debian |
 | **Mediaserver** | LXC | Media server / file storage | Debian |
 | **Pi-hole** | LXC | DNS filtering | Debian |
-| **Postgresql** | LXC | SQL Database | Debian
+| **Postgresql** | LXC | SQL database | Debian
 | **Loki** | LXC | Log aggregation/SIEM | Debian
 | **Docker** | LXC | Docker containers | Debian |
-| **Changedetection** | LXC | Monitors websites for changes | Debian |
 | **Nginx proxy manager** | LXC | Reverse proxy | Debian |
-| **Frigate** | LXC | CCTV monitoring | Debian |
 | **Grafana** | LXC | Data visualization | Debian |
 | **Prometheus** | LXC | Event monitoring | Debian |
-| **Kali** | LXC | Pen testing | Debian |
 | **Ansible** | LXC | Ansible controller | Debian |
 | **Proxmox Backup Server** | LXC | Backup platform | Debian |
 | **Infisical** | LXC | Secrets management | Debian |
 | **Authelia** | LXC | SSO (single sign-on) | Debian |
 | **Windows** | VM | Windows Server 2022 — AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
+
+**Personal services:**
+| Name | Type | Purpose | OS |
+| **Vikunja** | LXC | TODO app | Debian |
+| **Frigate** | LXC | CCTV monitoring | Debian |
+| **Mqtt** | LXC | MQTT broker (home automation) | Debian |
+| **Kali** | LXC | Pen testing | Debian |
+| **Caliweb** | LXC | ebook server | Debian |
+| **Gramps** | LXC | Family tree | Debian |
+| **Ollama** | LXC | LLM server | Debian |
+| **Changedetection** | LXC | Monitors websites for changes | Debian |
+| **Homepage** | LXC | Home lab dashboard | Debian |
+| **Commafeed** | LXC | RSS server | Debian |
 | **Home Assistant** | VM | Home automation platform | HAOS |
 
 
