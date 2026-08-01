@@ -40,15 +40,15 @@ A single-node home lab built from a repurposed PC, grown from a few self-hosted 
 
 Most of this was figured out during the initial setup. Once it works, it tends to keep working, short of a hardware failure or trying to change or upgrade something. 
 
-**Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. LXC also had better proxmox integration and less overhead. Moved them to LXC. Kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
+**Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. LXC also had better Proxmox integration and less overhead. Moved them to LXC. Kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
 
-**GPU passthrough** — I needed gpu passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI didn't mention this at the time, so from that I learned to prefer doing things through the command line for better feedback.
+**GPU passthrough** — I needed GPU passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI didn't mention this at the time, so from that I learned to prefer doing things through the command line for better feedback.
 
 **Storage** — Initially, I used a 125GB drive for the boot drive, thinking it would be sufficient. But as the number of services grew, I realised I would need more storage. I upgraded to a larger SSD a few months later. Should have planned for 2–3x from the start.
 
-**Logs** — Before I started using Linux, most of my technical problem solving was just googling things like "internet broken". However, since Linux exposes more information than Windows, I've learnt to check the logs before searching online. A lot of the time they're self-describing and the issue is immediately obvious. If not, having a detailed error log to search for troubleshooting steps is much easier than a vague google search. So now I always check the logs before resorting to google.
+**Logs** — Before I started using Linux, most of my technical problem solving was just googling things like "internet broken". However, since Linux exposes more information than Windows, I've learnt to check the logs before searching online. A lot of the time they're self-describing and the issue is immediately obvious. If not, having a detailed error log to search for troubleshooting steps is much easier than a vague Google search. Now I always check the logs first before resorting to Google.
 
-**Backups** — I use vzdump for my backups, with dailies, weeklies, and monthlies. I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. The network connection dropped mid-transfer. Since then, I validate backups with checksums before trusting them.
+**Backups** — I use vzdump for my backups, with daily/weekly/monthly backuops, so I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. The network connection had dropped mid-transfer. So I validate them now with checksums.
 
 ---
 
@@ -71,7 +71,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 
 - **Storage backend:** LVM-thin / directory + ZFS
 - **Networking:** Linux bridge — see [Network](#-network)
-- **Backup method:** vzdump to internal and external (off premise) drive - see [Backups & Disaster Recovery](#-backups--disaster-recovery)
+- **Backup method:** vzdump to internal and off premise drive - see [Backups & Disaster Recovery](#-backups--disaster-recovery)
 
 ### VMs & LXC Containers
 
@@ -85,13 +85,13 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Postgresql** | LXC | SQL database | Debian
 | **Loki** | LXC | Log aggregation/SIEM | Debian
 | **Docker** | LXC | Docker containers | Debian |
-| **Nginx proxy manager** | LXC | Reverse proxy | Debian |
 | **Grafana** | LXC | Data visualization | Debian |
 | **Prometheus** | LXC | Event monitoring | Debian |
 | **Ansible** | LXC | Ansible controller | Debian |
 | **Proxmox Backup Server** | LXC | Backup platform | Debian |
-| **Infisical** | LXC | Secrets management | Debian |
 | **Authelia** | LXC | SSO (single sign-on) | Debian |
+| **Traefik** | LXC | Reverse proxy | Debian |
+| **Tailscale** | LXC | Tailscale client/VPN | Debian |
 | **Windows** | VM | Windows Server 2022 — AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
 
 **Personal services:**
@@ -100,13 +100,17 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Frigate** | LXC | CCTV monitoring | Debian |
 | **Mqtt** | LXC | MQTT broker (home automation) | Debian |
 | **Kali** | LXC | Pen testing | Debian |
-| **Caliweb** | LXC | ebook server | Debian |
+| **Caliweb** | LXC | Ebook server | Debian |
 | **Gramps** | LXC | Family tree | Debian |
 | **Ollama** | LXC | LLM server | Debian |
 | **Changedetection** | LXC | Monitors websites for changes | Debian |
 | **Homepage** | LXC | Home lab dashboard | Debian |
 | **Commafeed** | LXC | RSS server | Debian |
 | **Home Assistant** | VM | Home automation platform | HAOS |
+
+**Cloud:**
+| Name | Type | Purpose | OS |
+| **Headscale** | EC2 | Tailscale coordinator | Debian |
 
 
 ---
@@ -119,7 +123,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | Joplin server | Note sync | Docker |
 | Immich | Photo backup | Docker |
 
-Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead (~50MB of RAM per container) and better proxmox integration. Docker is retained for services with complex dependencies or official Docker-only recommendations.
+Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead (~50MB of RAM per container) and better Proxmox integration. Docker is retained for services with complex dependencies or official Docker-only recommendations.
 
 ---
 
@@ -152,9 +156,9 @@ I also use an SSO service, Authelia, for MFA support and making tracking login d
 
 ### Reverse Proxy / Access
 
-- **Reverse proxy:** Nginx Proxy Manager
-- **TLS:** Let's Encrypt via DNS challenge
-- **External exposure:** None — LAN + VPN only
+- **Reverse proxy:** Back to Traefik. I originally used it, but switched to Nginx Proxy Manager as creating new entries was faster. Migrated back to Traefik for improved Authelia integration and easier automation since I got better at scripting. If I ever find one with proper LXC integration I'll use that as I need to configure a new entry manually every time I add a new service right now.
+- **TLS:** Let's Encrypt via DNS challenge via Cloudflare
+- **External exposure:** Tailscale VPN (Wireguard backend), with a Headscale instance hosted on an EC2. I previously just used Wireguard but that required me to expose a port to the internet... admittedly, that port didn't show up on scanners and thus was very low risk, but I don't like exposing ports so I switched to Tailscale.
 
 ---
 
@@ -168,16 +172,16 @@ I also use an SSO service, Authelia, for MFA support and making tracking login d
 
 **Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from workstation. Restore can take ~14 hours from cloud, ~1 hour onsite. 
 
-Local backups are managed through Proxmox Backup Server (PBS). PBS has some advantages over a standard disk backup, such as deduplication, backup validation, and improved retention management. 
+Local backups are managed through Proxmox Backup Server (PBS). PBS has some advantages over a standard disk backup, such as deduplication, backup validation, and improved retention management. Previously just used vzdumps with native Proxmox features, but these weren't very reliable and I would have to restore a few times before one worked. PBS has solved this problem with the aforementioned features.
 
-I then sync these backups to an S3 instance on AWS, using PBS. I previously synced them to a server hosted at another residence, but I wanted to get some experience with AWS and PBS offers a built in S3 API, so this seemed like a good opportunity to do so. Depending on the costing, I may switch to a cheaper provider, or go back to my previous offsite self-hosted strategy.
+I then sync these backups to an S3 instance on AWS, using PBS. I previously synced them to a server hosted at another residence, but I wanted to get some experience with AWS and PBS offers a built in S3 API, so this seemed like a good opportunity to get some AWS experience. Depending on the costing, I may switch to a cheaper provider, or go back to my previous offsite self-hosted strategy.
 
 ---
 
 ## 🛠️ Monitoring
 
 - Prometheus and Loki + Grafana for service, logs, and resource monitoring. They alert me of things like storage capacity, CPU temperature and broken services.
-- Notification method — Amazon SES (SMTP server). I previously used ntfy to push notifications to Telegram, but since I wanted AWS experience, I switched to SES. Depending on the costs...
+- Notification method — Amazon SES (SMTP server). I previously used Ntfy to push notifications to Telegram, but since I wanted AWS experience, I switched to SES. Depending on the costs...
 
 ---
 
@@ -186,8 +190,9 @@ I then sync these backups to an S3 instance on AWS, using PBS. I previously sync
 | Goal | Priority | Blocker |
 |---|---|---|
 | IaC | High | Learning Ansible and Terraform |
-| Another node for backups | Medium | Another server |
-| K3s instance | Low | Migrating Docker and configuring K3s |
+| Host docs on AWS + Gitea | Medium | Configuration |
+| Another node for backups | Low | Another server. Expensive. |
+| K3s LXC | Low | Migrating Docker and configuring K3s |
 
 ---
 
