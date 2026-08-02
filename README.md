@@ -40,15 +40,17 @@ A single-node home lab built from a repurposed PC, grown from a few self-hosted 
 
 Most of this was figured out during the initial setup. Once it works, it tends to keep working, short of a hardware failure or trying to change or upgrade something. 
 
-**Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. LXC also had better Proxmox integration and less overhead. Moved them to LXC. Kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
+**Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. LXC also had better Proxmox integration and less overhead. I Moved those services to LXC and kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
 
-**GPU passthrough** — I needed GPU passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI didn't mention this at the time, so from that I learned to prefer doing things through the command line for better feedback.
+**GPU passthrough** — I needed GPU passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI didn't mention this at the time. From that I learned to prefer doing things through the command line for better feedback as the UI doesn't always provide all the necessary information, or abstracts it.
 
-**Storage** — Initially, I used a 125GB drive for the boot drive, thinking it would be sufficient. But as the number of services grew, I realised I would need more storage. I upgraded to a larger SSD a few months later. Should have planned for 2–3x from the start.
+**AI** - I've had a mixed experience with AI. I find it is faster when troubleshooting basic issues or queries like "how do I get the amount of available storage on a drive in PowerShell?". On the other hand, when it comes to more complex or bespoke problems, it tends to falter or provide hallucinated information (though it has gotten better at even these problems lately, depending on the model). 
 
-**Logs** — Before I started using Linux, most of my technical problem solving was just googling things like "internet broken". However, since Linux exposes more information than Windows, I've learnt to check the logs before searching online. A lot of the time they're self-describing and the issue is immediately obvious. If not, having a detailed error log to search for troubleshooting steps is much easier than a vague Google search. Now I always check the logs first before resorting to Google.
+Generally, my troubleshooting process is to find the issue, check the logs, if it's something simple I'll fix it on the spot, if not, I'll provide AI with those logs and context, and if AI fails to make progress within 5 minutes, I will refer to the docs or Google. This tends to result in the fastest troubleshooting process for me.
 
-**Backups** — I use vzdump for my backups, with daily/weekly/monthly backuops, so I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. The network connection had dropped mid-transfer. So I validate them now with checksums.
+**Logs** — Before I started using Linux, most of my technical problem solving was just googling things like "internet broken". However, since Linux exposes more diagnostic information than Windows, I've learnt to check the logs before searching online. A lot of the time they're self-describing and the issue is immediately obvious. If not, having a detailed error log to search for troubleshooting steps is much easier than a vague Google search. Now I always check the logs first before resorting to Google.
+
+**Backups** — I use vzdump for my backups, with daily/weekly/monthly backups, so I assumed that meant I was covered. First time I actually tried restoring a VM to test, it didn't work. I was initially concerned about data corruption, but I tried restoring again, this time with the drive connected directly to the server. The network connection had dropped mid-transfer. The main lesson was that a backup is only as good as the restore process. I now test restores and validate backups with checksums rather than assuming they are working.
 
 ---
 
@@ -92,6 +94,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Authelia** | LXC | SSO (single sign-on) | Debian |
 | **Traefik** | LXC | Reverse proxy | Debian |
 | **Tailscale** | LXC | Tailscale client/VPN | Debian |
+| **Terraform** | LXC | Infrastructure provisioning | Debian |
 | **Windows** | VM | Windows Server 2022 — AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
 
 **Personal services:**
@@ -110,7 +113,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 
 **Cloud:**
 | Name | Type | Purpose | OS |
-| **Headscale** | EC2 | Tailscale coordinator | Debian |
+| **Headscale** | EC2, t4g.micro | Tailscale coordinator | Debian |
 
 
 ---
@@ -198,7 +201,6 @@ I then sync these backups to an S3 instance on AWS, using PBS. I previously sync
 
 ## 📸 Network Diagram / Screenshots
 
-<img width="1000" alt="Network Diagram" src="https://github.com/user-attachments/assets/0ef7ed96-d031-4423-91ca-46bb580d9ea6" />
 <img width="1000" alt="proxmox_metrics" src="https://github.com/user-attachments/assets/f1e1c7dc-a786-48b4-91de-a02548d85263" />
 <img width="1000" alt="Grafana dashboard showing resource utilization" src="https://github.com/user-attachments/assets/7d44e1c9-005b-4808-9088-94202115c88a" />
 <img width="1000" alt="Grafana dashboard part 2" src="https://github.com/user-attachments/assets/d2df7b17-b993-4a47-86e4-389ae78a7116" />
