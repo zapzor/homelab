@@ -95,6 +95,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Traefik** | LXC | Reverse proxy | Debian |
 | **Tailscale** | LXC | Tailscale client/VPN | Debian |
 | **Terraform** | LXC | Infrastructure provisioning | Debian |
+| **Code Server** | LXC | Self-hosted VSCode | Debian |
 | **Windows** | VM | Windows Server 2022 — AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
 
 **Personal services:**
@@ -183,8 +184,8 @@ I then sync these backups to an S3 instance on AWS, using PBS. I previously sync
 
 ## 🛠️ Monitoring
 
-- Prometheus and Loki + Grafana for service, logs, and resource monitoring. They alert me of things like storage capacity, CPU temperature and broken services.
-- Notification method — Amazon SES (SMTP server). I previously used Ntfy to push notifications to Telegram, but since I wanted AWS experience, I switched to SES. Depending on the costs...
+- Prometheus and Loki + Grafana for service, logs, and resource monitoring. I have alerts configured for when I am nearing storage capacity, CPU temperature is high or when services have broken. I use Grafana for data visualisation. I set this up after a drive died on me with little warning and so naturally I tried to figure out if I could get some kind of alert system configured that would let me know if my drives are dying based on SMART stats.
+- Notification method: Amazon SES (SMTP server). I previously used Ntfy to push notifications to Telegram, but since I wanted AWS experience, and I prefer emails to push notifications, I switched to SES. Depending on the costs...
 
 ---
 
@@ -199,7 +200,7 @@ I then sync these backups to an S3 instance on AWS, using PBS. I previously sync
 
 ---
 
-## 📸 Network Diagram / Screenshots
+## 📸 Screenshots
 
 <img width="1000" alt="proxmox_metrics" src="https://github.com/user-attachments/assets/f1e1c7dc-a786-48b4-91de-a02548d85263" />
 <img width="1000" alt="Grafana dashboard showing resource utilization" src="https://github.com/user-attachments/assets/7d44e1c9-005b-4808-9088-94202115c88a" />
