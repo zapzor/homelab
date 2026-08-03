@@ -40,7 +40,7 @@ A single-node home lab built from a repurposed PC, grown from a few self-hosted 
 
 Most of this was figured out during the initial setup. Once it works, it tends to keep working, short of a hardware failure or trying to change or upgrade something.
 
-**Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. LXC also had better Proxmox integration and less overhead. I Moved those services to LXC and kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
+**Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, Tailscale) fought Docker networking or needed host-level stuff that containers hide. LXC also had better Proxmox integration and less overhead. I Moved those services to LXC and kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
 
 **GPU passthrough** — I needed GPU passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI didn't mention this at the time. From that I learned to prefer doing things through the command line for better feedback as the UI doesn't always provide all the necessary information, or abstracts it.
 
@@ -143,7 +143,7 @@ Docker runs inside the dedicated LXC above. Most services were previously runnin
 | **Wi-Fi** | Archer C7 Router, Deco Mesh M4 AP  |
 | **VLANs** | 2 VLANs, one for IoT and another for management traffic. |
 | **DNS/Ad-blocking** | Pi-hole, running as LXC above |
-| **Remote access** | WireGuard |
+| **Remote access** | Tailscale |
 
 ---
 
@@ -152,7 +152,7 @@ Docker runs inside the dedicated LXC above. Most services were previously runnin
 | Layer | Control |
 |:---|:---|
 | **Network segmentation** | 4 VLANs to isolate IoT, Guest, Management, and Main traffic |
-| **Remote access** | WireGuard only; no services exposed to the internet |
+| **Remote access** | Tailscale only; no services exposed to the internet |
 | **DNS filtering** | Pi-hole blocks ads/malware at the network level |
 | **Encryption** | TLS via Let's Encrypt for internal services; VPN tunnel for remote access |
 | **Host hardening** | Proxmox web UI restricted to management VLAN; SSH key-based auth, root login disabled |
@@ -165,7 +165,7 @@ I also use an SSO service, Authelia, for MFA support and making tracking login d
 
 - **Reverse proxy:** Back to Traefik. I originally used it, but switched to Nginx Proxy Manager as creating new entries was faster. Migrated back to Traefik for improved Authelia integration and easier automation since I got better at scripting. If I ever find one with proper LXC integration I'll use that as I need to configure a new entry manually every time I add a new service right now.
 - **TLS:** Let's Encrypt via DNS challenge via Cloudflare
-- **External exposure:** Tailscale VPN (Wireguard backend), with a Headscale instance hosted on an EC2. I previously just used Wireguard but that required me to expose a port to the internet... admittedly, that port didn't show up on scanners and thus was very low risk, but I don't like exposing ports so I switched to Tailscale.
+- **External exposure:** Tailscale VPN (Wireguard backend), with a Headscale instance hosted on an EC2. I previously just used standard Wireguard but that required me to expose a port to the internet... admittedly, that port didn't show up on scanners and thus was very low risk, but I don't like exposing ports so I switched to Tailscale.
 
 ---
 
