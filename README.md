@@ -28,7 +28,7 @@ A single-node home lab built from a repurposed PC, grown from a few self-hosted 
 | **Linux** | Debian administration, shell scripting, systemd, troubleshooting |
 | **Networking** | VLANs, OpenWrt, WireGuard, DNS, firewall configuration |
 | **Docker** | Docker Compose, networking, persistent volumes |
-| **Reverse Proxy** | Nginx Proxy Manager, TLS, Let's Encrypt |
+| **Reverse Proxy** | Traefik, TLS, Let's Encrypt |
 | **Monitoring** | Prometheus, Grafana, ntfy alerts |
 | **Backup & Recovery** | Proxmox backups, rsync, recovery documentation |
 | **Security** | Network segmentation, VPN-only access, Pi-hole/Unbound |
