@@ -30,7 +30,7 @@ A single-node home lab built from a repurposed PC, grown from a few self-hosted 
 | **Docker** | Docker Compose, networking, persistent volumes |
 | **Reverse Proxy** | Traefik, TLS, Let's Encrypt |
 | **Monitoring** | Prometheus, Grafana, ntfy alerts |
-| **Backup & Recovery** | Proxmox backups, rsync, recovery documentation |
+| **Backup & Recovery** | Proxmox backups, rsync, S3, recovery documentation |
 | **Security** | Network segmentation, VPN-only access, Pi-hole/Unbound |
 | **Hardware** | Home server build, storage planning, GPU passthrough |
 
