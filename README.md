@@ -38,13 +38,13 @@ A single-node home lab built from a repurposed PC, grown from a few self-hosted 
 
 ## 🧠 Some Lessons Learned
 
-Most of this was figured out during the initial setup. Once it works, it tends to keep working, short of a hardware failure or trying to change or upgrade something. 
+Most of this was figured out during the initial setup. Once it works, it tends to keep working, short of a hardware failure or trying to change or upgrade something.
 
 **Docker vs. LXC** — Started with Docker for everything because that's what tutorials use. Some services (Pi-hole, WireGuard) fought Docker networking or needed host-level stuff that containers hide. LXC also had better Proxmox integration and less overhead. I Moved those services to LXC and kept Docker for things like Immich where the official docs assume Docker and I didn't want to maintain a custom install.
 
 **GPU passthrough** — I needed GPU passthrough for Ollama (used for running language models). Proxmox UI has a checkbox for PCI device passthrough. Checked it, booted the LXC, nothing. Turns out LXC containers need to be privileged for PCI passthrough. The UI didn't mention this at the time. From that I learned to prefer doing things through the command line for better feedback as the UI doesn't always provide all the necessary information, or abstracts it.
 
-**AI** - I've had a mixed experience with AI. I find it is faster when troubleshooting basic issues or queries like "how do I get the amount of available storage on a drive in PowerShell?". On the other hand, when it comes to more complex or bespoke problems, it tends to falter or provide hallucinated information (though it has gotten better at even these problems lately, depending on the model). 
+**AI** - I've had a mixed experience with AI. I find it is faster when troubleshooting basic issues or queries like "how do I get the amount of available storage on a drive in PowerShell?". On the other hand, when it comes to more complex or bespoke problems, it tends to falter or provide hallucinated information (though it has gotten better at even these problems lately, depending on the model).
 
 Generally, my troubleshooting process is to find the issue, check the logs, if it's something simple I'll fix it on the spot, if not, I'll provide AI with those logs and context, and if AI fails to make progress within 5 minutes, I will refer to the docs or Google. This tends to result in the fastest troubleshooting process for me.
 
@@ -95,11 +95,13 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Traefik** | LXC | Reverse proxy | Debian |
 | **Tailscale** | LXC | Tailscale client/VPN | Debian |
 | **Terraform** | LXC | Infrastructure provisioning | Debian |
+| **OpenBao** | LXC | Secrets Manager | Debian |
 | **Code Server** | LXC | Self-hosted VSCode | Debian |
-| **Windows** | VM | Windows Server 2022 — AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
+| **Windows** | VM | Windows Server 2022 - AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
 
 **Personal services:**
 | Name | Type | Purpose | OS |
+|---|---|---|---|
 | **Vikunja** | LXC | TODO app | Debian |
 | **Frigate** | LXC | CCTV monitoring | Debian |
 | **Mqtt** | LXC | MQTT broker (home automation) | Debian |
@@ -114,6 +116,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 
 **Cloud:**
 | Name | Type | Purpose | OS |
+|---|---|---|---|
 | **Headscale** | EC2, t4g.micro | Tailscale coordinator | Debian |
 
 
@@ -174,7 +177,7 @@ I also use an SSO service, Authelia, for MFA support and making tracking login d
 | **Docker volumes/configs** | rsync | Daily | workstation + cloud |
 | **Documentation** | Git | On change | GitHub (this repo) |
 
-**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from workstation. Restore can take ~14 hours from cloud, ~1 hour onsite. 
+**Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from workstation. Restore can take ~14 hours from cloud, ~1 hour onsite.
 
 Local backups are managed through Proxmox Backup Server (PBS). PBS has some advantages over a standard disk backup, such as deduplication, backup validation, and improved retention management. Previously just used vzdumps with native Proxmox features, but these weren't very reliable and I would have to restore a few times before one worked. PBS has solved this problem with the aforementioned features.
 
