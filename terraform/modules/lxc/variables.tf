@@ -4,6 +4,7 @@ variable "name" {
 
 variable "vmid" {
   type = number
+  nullable = true
 }
 
 variable "node" {
