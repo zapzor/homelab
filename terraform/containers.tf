@@ -1,6 +1,6 @@
 module "lxc" {
-  source      = "./modules/lxc"
-  for_each    = local.containers
+  source   = "./modules/lxc"
+  for_each = local.containers
 
   name        = each.key
   vmid        = each.value.vmid
