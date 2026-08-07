@@ -1,0 +1,202 @@
+wireguard:
+  vmid: 2100
+  cores: 1
+  memory: 512
+  size: 8
+  ip: "10.99.0.11/24"
+
+mediaserver:
+  vmid: 2101
+  cores: 2
+  memory: 4096
+  size: 8
+  ip: "10.99.0.12/24"
+
+postgresql:
+  vmid: 2102
+  cores: 1
+  memory: 1024
+  size: 8
+  ip: "10.99.0.13/24"
+
+homepage:
+  vmid: 2103
+  cores: 2
+  memory: 1024
+  size: 8
+  ip: "10.99.0.14/24"
+
+docker:
+  vmid: 2104
+  cores: 2
+  memory: 2048
+  size: 8
+  ip: "10.99.0.15/24"
+
+pihole:
+  vmid: 2105
+  cores: 2
+  memory: 512
+  size: 8
+  ip: "10.99.0.16/24"
+
+changedetection:
+  vmid: 2106
+  cores: 4
+  memory: 4096
+  size: 8
+  ip: "10.99.0.17/24"
+
+caliweb:
+  vmid: 2107
+  cores: 2
+  memory: 2048
+  size: 8
+  ip: "10.99.0.18/24"
+
+grafana:
+  vmid: 2108
+  cores: 1
+  memory: 512
+  size: 8
+  ip: "10.99.0.19/24"
+
+commafeed:
+  vmid: 2109
+  cores: 2
+  memory: 2048
+  size: 8
+  ip: "10.99.0.20/24"
+
+audiobookshelf:
+  vmid: 2110
+  cores: 2
+  memory: 2048
+  size: 8
+  ip: "10.99.0.21/24"
+
+prometheus:
+  vmid: 2111
+  cores: 1
+  memory: 2048
+  size: 8
+  ip: "10.99.0.22/24"
+
+terraform:
+  vmid: 2112
+  cores: 1
+  memory: 512
+  size: 8
+  ip: "10.99.0.23/24"
+
+prometheus-pve-exporter:
+  vmid: 2113
+  cores: 1
+  memory: 512
+  size: 8
+  ip: "10.99.0.24/24"
+
+ollama:
+  vmid: 2114
+  cores: 4
+  memory: 4096
+  size: 8
+  ip: "10.99.0.25/24"
+
+frigate:
+  vmid: 2115
+  cores: 4
+  memory: 2048
+  size: 8
+  ip: "10.99.0.26/24"
+
+mqtt:
+  vmid: 2116
+  cores: 1
+  memory: 512
+  size: 8
+  ip: "10.99.0.27/24"
+
+invidious:
+  vmid: 2117
+  cores: 2
+  memory: 4096
+  size: 8
+  ip: "10.99.0.28/24"
+
+nexterm:
+  vmid: 2118
+  cores: 2
+  memory: 2048
+  size: 8
+  ip: "10.99.0.29/24"
+
+authelia:
+  vmid: 2119
+  cores: 1
+  memory: 512
+  size: 8
+  ip: "10.99.0.30/24"
+
+loki:
+  vmid: 2120
+  cores: 1
+  memory: 512
+  size: 8
+  ip: "10.99.0.31/24"
+
+vikunja:
+  vmid: 2121
+  cores: 1
+  memory: 1024
+  size: 8
+  ip: "10.99.0.32/24"
+
+ansible:
+  vmid: 2122
+  cores: 1
+  memory: 512
+  size: 8
+  ip: "10.99.0.33/24"
+
+proxmox-backup-server:
+  vmid: 2123
+  cores: 2
+  memory: 2048
+  size: 8
+  ip: "10.99.0.34/24"
+
+gramps-web:
+  vmid: 2124
+  cores: 2
+  memory: 4096
+  size: 8
+  ip: "10.99.0.35/24"
+
+traefik:
+  vmid: 2125
+  cores: 1
+  memory: 512
+  size: 8
+  ip: "10.99.0.36/24"
+
+tailscale:
+  vmid: 2126
+  cores: 2
+  memory: 2048
+  size: 8
+  ip: "10.99.0.37/24"
+
+openbao:
+  vmid: 2127
+  cores: 1
+  memory: 1024
+  size: 8
+  ip: "10.99.0.38/24"
+
+code-server:
+  vmid: 2128
+  cores: 4
+  memory: 2048
+  size: 8
+  ip: "10.99.0.39/24"
