@@ -11,6 +11,18 @@ mediaserver:
   size: 8
   ip: "10.99.0.12/24"
 
+ntfy:
+  cores: 1
+  memory: 512
+  size: 2
+  ip: "192.168.0.246/24"
+
+navidrome:
+  cores: 2
+  memory: 1024
+  size: 4
+  ip: "192.168.0.248/24"
+
 postgresql:
   cores: 1
   memory: 1024
