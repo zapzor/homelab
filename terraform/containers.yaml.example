@@ -1,3 +1,4 @@
+# The workload inventory
 wireguard:
   cores: 1
   memory: 512

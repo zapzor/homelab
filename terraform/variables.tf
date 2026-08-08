@@ -1,4 +1,4 @@
-# Some global variables for the Terraform configuration
+# Some global variables for Terraform
 variable "container_password" {
   type      = string
   sensitive = true

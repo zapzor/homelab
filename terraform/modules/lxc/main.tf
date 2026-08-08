@@ -1,4 +1,4 @@
-# This module creates a Proxmox LXC container.
+# This creates the defined LXC container
 
 resource "proxmox_virtual_environment_container" "this" {
   node_name    = var.node

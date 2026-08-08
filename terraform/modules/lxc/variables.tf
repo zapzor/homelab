@@ -1,4 +1,4 @@
-# This file defines the input variables for the Terraform module.
+# Variables for the LXC module
 variable "name" {
   type = string
 }

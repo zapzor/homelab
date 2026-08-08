@@ -1,4 +1,3 @@
-# This file defines the Terraform configuration, including required versions and providers.
 terraform {
   required_version = ">= 1.5"
 
