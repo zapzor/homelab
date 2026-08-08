@@ -89,14 +89,13 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Docker** | LXC | Docker containers | Debian |
 | **Grafana** | LXC | Data visualization | Debian |
 | **Prometheus** | LXC | Event monitoring | Debian |
-| **Ansible** | LXC | Ansible controller | Debian |
 | **Proxmox Backup Server** | LXC | Backup platform | Debian |
 | **Authelia** | LXC | SSO (single sign-on) | Debian |
 | **Traefik** | LXC | Reverse proxy | Debian |
 | **Tailscale** | LXC | Tailscale client/VPN | Debian |
-| **Terraform** | LXC | Infrastructure provisioning | Debian |
 | **OpenBao** | LXC | Secrets Manager | Debian |
-| **Code Server** | LXC | Self-hosted VSCode | Debian |
+| **Code Server** | LXC | Coding and IaC management | Debian |
+| **Ntfy** | LXC | Notification service | Debian |
 | **Windows** | VM | Windows Server 2022 - AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
 
 **Personal services:**
@@ -117,20 +116,14 @@ Proxmox is installed directly on bare metal and hosts everything below.
 **Cloud:**
 | Name | Type | Purpose | OS |
 |---|---|---|---|
-| **Headscale** | EC2, t4g.micro | Tailscale coordinator | Debian |
+| **Headscale** | t4g.micro | Tailscale coordinator | Debian |
 
+**Docker:**
+| Name | Type | Purpose | OS |
+|---|---|---|---|
+| Joplin server | Docker Container | Note sync | Debian |
 
----
-
-## 📦 Containerized Services (Docker)
-
-
-| Service | Purpose | Runs On |
-|---|---|---|
-| Joplin server | Note sync | Docker |
-| Immich | Photo backup | Docker |
-
-Docker runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead (~50MB of RAM per container) and better Proxmox integration. Docker is retained for services with complex dependencies or official Docker-only recommendations.
+A single Docker container runs inside the dedicated LXC above. Most services were previously running in Docker, but were migrated to LXC for lower overhead and better Proxmox integration. Docker is retained for services with complex dependencies or official Docker-only recommendations.
 
 ---
 

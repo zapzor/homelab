@@ -70,12 +70,6 @@ prometheus:
   size: 8
   ip: "10.99.0.22/24"
 
-terraform:
-  cores: 1
-  memory: 512
-  size: 8
-  ip: "10.99.0.23/24"
-
 prometheus-pve-exporter:
   cores: 1
   memory: 512
@@ -129,12 +123,6 @@ vikunja:
   memory: 1024
   size: 8
   ip: "10.99.0.32/24"
-
-ansible:
-  cores: 1
-  memory: 512
-  size: 8
-  ip: "10.99.0.33/24"
 
 proxmox-backup-server:
   cores: 2

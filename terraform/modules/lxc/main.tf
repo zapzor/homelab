@@ -1,3 +1,5 @@
+# This module creates a Proxmox LXC container.
+
 resource "proxmox_virtual_environment_container" "this" {
   node_name    = var.node
   vm_id        = var.vmid

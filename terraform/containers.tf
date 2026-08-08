@@ -1,3 +1,4 @@
+# This file defines the LXC containers to be created in Proxmox using Terraform.
 module "lxc" {
   source   = "./modules/lxc"
   for_each = local.containers

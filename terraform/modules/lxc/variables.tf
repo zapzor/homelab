@@ -1,3 +1,4 @@
+# This file defines the input variables for the Terraform module.
 variable "name" {
   type = string
 }

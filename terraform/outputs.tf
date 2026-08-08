@@ -1,3 +1,4 @@
+# Output for the created containers
 output "containers" {
   value = {
     for name, mod in module.lxc : name => {
