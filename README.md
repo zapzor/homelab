@@ -118,6 +118,8 @@ Proxmox is installed directly on bare metal and hosts everything below.
 |---|---|---|---|
 | **Headscale** | t4g.micro | Tailscale coordinator | Debian |
 
+An EC2 instance running on AWS. Right now, I just use it as a control server for Tailscale but some day I'd like to expand it to host these docs on Gitea. On a separate instance of course.
+
 **Docker:**
 | Name | Type | Purpose | OS |
 |---|---|---|---|
@@ -158,7 +160,7 @@ I also use an SSO service, Authelia, for MFA support and making tracking login d
 
 - **Reverse proxy:** Back to Traefik. I originally used it, but switched to Nginx Proxy Manager as creating new entries was faster. Migrated back to Traefik for improved Authelia integration and easier automation since I got better at scripting. If I ever find one with proper LXC integration I'll use that as I need to configure a new entry manually every time I add a new service right now.
 - **TLS:** Let's Encrypt via DNS challenge via Cloudflare
-- **External exposure:** Tailscale VPN (Wireguard backend), with a Headscale instance hosted on an EC2. I previously just used standard Wireguard but that required me to expose a port to the internet... admittedly, that port didn't show up on scanners and thus was very low risk, but I don't like exposing ports so I switched to Tailscale.
+- **External exposure:** Tailscale VPN (Wireguard), with a Headscale instance hosted on an EC2. I previously just used standard Wireguard but that required me to expose a port to the internet... admittedly, that port didn't show up on scanners and thus was very low risk, but I don't like exposing ports so I switched to Tailscale.
 
 ---
 
@@ -182,6 +184,12 @@ I then sync these backups to an S3 instance on AWS, using PBS. I previously sync
 
 - Prometheus and Loki + Grafana for service, logs, and resource monitoring. I have alerts configured for when I am nearing storage capacity, CPU temperature is high or when services have broken. I use Grafana for data visualisation. I set this up after a drive died on me with little warning and so naturally I tried to figure out if I could get some kind of alert system configured that would let me know if my drives are dying based on SMART stats.
 - Notification method: Amazon SES (SMTP server). I previously used Ntfy to push notifications to Telegram, but since I wanted AWS experience, and I prefer emails to push notifications, I switched to SES. Depending on the costs...
+
+---
+
+## ⚙️ IaC
+
+I’m starting to codify my homelab infrastructure with Terraform. Right now it's just a basic inventory of my lab environment, but I'd like to expand it to include CI/CD and use Ansible for configuration management.
 
 ---
 
