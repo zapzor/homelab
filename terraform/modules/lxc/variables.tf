@@ -1,10 +1,9 @@
-# Variables for the LXC module
 variable "name" {
   type = string
 }
 
 variable "vmid" {
-  type = number
+  type     = number
   nullable = true
 }
 
@@ -38,13 +37,10 @@ variable "ip" {
 
 variable "gateway" {
   type = string
+  default = "10.99.0.1"
 }
 
 variable "ostemplate" {
-  type = string
-}
-
-variable "password" {
-  type      = string
-  sensitive = true
+  type    = string
+  default = null
 }

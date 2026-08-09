@@ -1,11 +1,7 @@
 # This creates the defined LXC container
-
 resource "proxmox_virtual_environment_container" "this" {
   node_name    = var.node
   vm_id        = var.vmid
-  description  = var.name
-  unprivileged = true
-  started      = false
 
   initialization {
     hostname = var.name
@@ -17,11 +13,7 @@ resource "proxmox_virtual_environment_container" "this" {
       }
     }
 
-    user_account {
-      password = var.password
-    }
   }
-
   cpu {
     cores = var.cores
   }
@@ -35,16 +27,30 @@ resource "proxmox_virtual_environment_container" "this" {
     size         = var.rootfs_size
   }
 
-  network_interface {
-    name   = "eth0"
-    bridge = var.bridge
-  }
-
   operating_system {
     template_file_id = var.ostemplate
   }
 
-  features {
-    nesting = true
+  lifecycle {
+    ignore_changes = [
+      environment_variables,
+      operating_system,
+      description,
+      tags,
+      mount_point,
+      features,
+      disk,
+      initialization,
+      memory,
+      unprivileged,
+      console,
+      cpu,
+      network_interface,
+      timeout_clone,
+      timeout_create,
+      timeout_delete,
+      timeout_start,
+      timeout_update,
+    ]
   }
 }

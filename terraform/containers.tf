@@ -1,4 +1,11 @@
 # This calls the lxc module for each container defined in the containers.yaml file
+
+import {
+  for_each = local.containers
+  to       = module.lxc[each.key].proxmox_virtual_environment_container.this
+  id       = "${var.node}/${each.value.vmid}"
+}
+
 module "lxc" {
   source   = "./modules/lxc"
   for_each = local.containers
@@ -15,5 +22,5 @@ module "lxc" {
   storage    = var.storage
   gateway    = var.gateway
   ostemplate = var.ostemplate
-  password   = var.container_password
+  #password   = var.container_password
 }
