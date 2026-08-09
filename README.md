@@ -225,8 +225,6 @@ I decided I needed an alerting/monitoring system after a drive died on me withou
 | Kernel Panic | critical | `... \|~ "Kernel panic\|BUG:\|Call trace\|..."` |
 | Segfault | warning | `... \|= "segfault"` |
 
-**Notes:** Node Down alerts on no-data. All others use `noDataState: OK`.
-
 ---
 
 ## ⚙️ IaC
