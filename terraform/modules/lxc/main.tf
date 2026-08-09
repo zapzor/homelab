@@ -29,8 +29,8 @@ resource "proxmox_virtual_environment_container" "this" {
 
   operating_system {
     template_file_id = var.ostemplate
+    type             = var.ostemplate == null ? var.os_type : null
   }
-
   lifecycle {
     ignore_changes = [
       environment_variables,

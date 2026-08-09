@@ -44,3 +44,12 @@ variable "ostemplate" {
   type    = string
   default = null
 }
+
+variable "os_type" {
+  type    = string
+  default = "debian"
+}
+variable "unprivileged" {
+  type    = string
+  default = "true"
+}

@@ -28,3 +28,8 @@ variable "ostemplate" {
   type    = string
   default = "local:vztmpl/debian-13-standard_13.6-1_amd64.tar.zst"
 }
+
+variable "swap" {
+  type    = string
+  default = "512"
+}

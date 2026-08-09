@@ -3,178 +3,178 @@ wireguard:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 mediaserver:
   cores: 2
   memory: 4096
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 ntfy:
   cores: 1
   memory: 512
   size: 2
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 navidrome:
   cores: 2
   memory: 1024
   size: 4
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
   alloy:
   cores: 2
   memory: 1024
   size: 4
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 postgresql:
   cores: 1
   memory: 1024
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 homepage:
   cores: 2
   memory: 1024
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 docker:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 pihole:
   cores: 2
   memory: 512
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 changedetection:
   cores: 4
   memory: 4096
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 caliweb:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 grafana:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 commafeed:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 audiobookshelf:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 prometheus:
   cores: 1
   memory: 2048
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 prometheus-pve-exporter:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 ollama:
   cores: 4
   memory: 4096
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 frigate:
   cores: 4
   memory: 2048
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 mqtt:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 invidious:
   cores: 2
   memory: 4096
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 nexterm:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 authelia:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 loki:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 vikunja:
   cores: 1
   memory: 1024
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 proxmox-backup-server:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 gramps-web:
   cores: 2
   memory: 4096
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 traefik:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 tailscale:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 openbao:
   cores: 1
   memory: 1024
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
 
 code-server:
   cores: 4
   memory: 2048
   size: 8
-  ip: "10.99.0.*"
+  ip: "dhcp"
