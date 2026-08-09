@@ -182,7 +182,7 @@ I then sync these backups to an S3 instance on AWS, using PBS. I previously sync
 
 ## 🛠️ Monitoring
 
-I use Grafana for alerting with Prometheus, Loki, PostgreSQL, and SNMP configured as datasources. I'd like to add CloudWatch as another when I expand my AWS infrastructure further.
+I use Grafana for alerting with Prometheus and Loki configured as datasources. When I try to centralize my databases (for experimentation, not efficiency) I plan to add PostgreSQL as a datasource. My router firmware (OpenWRT) has a compatible Prometheus exporter so I don't need SNMP right now, but that would be the next thing on the list if I ever get network gear that requires it. I'd like to add CloudWatch as another when I expand my AWS infrastructure further.
 
 Grafana is very useful for visualizing data on my infrastructure. I have Unified Alerts configured to alert me via an SMTP server (AWS SES) when certain conditions are met, such as a systemd service failing on the hypervisor or a workload running out of memory. I previously used Ntfy to push notifications to Telegram, but since I wanted AWS experience, and I prefer emails to push notifications for this stuff, I switched to SES.
 
