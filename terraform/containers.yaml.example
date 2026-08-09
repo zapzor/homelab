@@ -3,172 +3,178 @@ wireguard:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.11/24"
+  ip: "10.99.0.*"
 
 mediaserver:
   cores: 2
   memory: 4096
   size: 8
-  ip: "10.99.0.12/24"
+  ip: "10.99.0.*"
 
 ntfy:
   cores: 1
   memory: 512
   size: 2
-  ip: "192.168.0.246/24"
+  ip: "10.99.0.*"
 
 navidrome:
   cores: 2
   memory: 1024
   size: 4
-  ip: "192.168.0.248/24"
+  ip: "10.99.0.*"
+
+  alloy:
+  cores: 2
+  memory: 1024
+  size: 4
+  ip: "10.99.0.*"
 
 postgresql:
   cores: 1
   memory: 1024
   size: 8
-  ip: "10.99.0.13/24"
+  ip: "10.99.0.*"
 
 homepage:
   cores: 2
   memory: 1024
   size: 8
-  ip: "10.99.0.14/24"
+  ip: "10.99.0.*"
 
 docker:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.15/24"
+  ip: "10.99.0.*"
 
 pihole:
   cores: 2
   memory: 512
   size: 8
-  ip: "10.99.0.16/24"
+  ip: "10.99.0.*"
 
 changedetection:
   cores: 4
   memory: 4096
   size: 8
-  ip: "10.99.0.17/24"
+  ip: "10.99.0.*"
 
 caliweb:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.18/24"
+  ip: "10.99.0.*"
 
 grafana:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.19/24"
+  ip: "10.99.0.*"
 
 commafeed:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.20/24"
+  ip: "10.99.0.*"
 
 audiobookshelf:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.21/24"
+  ip: "10.99.0.*"
 
 prometheus:
   cores: 1
   memory: 2048
   size: 8
-  ip: "10.99.0.22/24"
+  ip: "10.99.0.*"
 
 prometheus-pve-exporter:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.24/24"
+  ip: "10.99.0.*"
 
 ollama:
   cores: 4
   memory: 4096
   size: 8
-  ip: "10.99.0.25/24"
+  ip: "10.99.0.*"
 
 frigate:
   cores: 4
   memory: 2048
   size: 8
-  ip: "10.99.0.26/24"
+  ip: "10.99.0.*"
 
 mqtt:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.27/24"
+  ip: "10.99.0.*"
 
 invidious:
   cores: 2
   memory: 4096
   size: 8
-  ip: "10.99.0.28/24"
+  ip: "10.99.0.*"
 
 nexterm:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.29/24"
+  ip: "10.99.0.*"
 
 authelia:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.30/24"
+  ip: "10.99.0.*"
 
 loki:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.31/24"
+  ip: "10.99.0.*"
 
 vikunja:
   cores: 1
   memory: 1024
   size: 8
-  ip: "10.99.0.32/24"
+  ip: "10.99.0.*"
 
 proxmox-backup-server:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.34/24"
+  ip: "10.99.0.*"
 
 gramps-web:
   cores: 2
   memory: 4096
   size: 8
-  ip: "10.99.0.35/24"
+  ip: "10.99.0.*"
 
 traefik:
   cores: 1
   memory: 512
   size: 8
-  ip: "10.99.0.36/24"
+  ip: "10.99.0.*"
 
 tailscale:
   cores: 2
   memory: 2048
   size: 8
-  ip: "10.99.0.37/24"
+  ip: "10.99.0.*"
 
 openbao:
   cores: 1
   memory: 1024
   size: 8
-  ip: "10.99.0.38/24"
+  ip: "10.99.0.*"
 
 code-server:
   cores: 4
   memory: 2048
   size: 8
-  ip: "10.99.0.39/24"
+  ip: "10.99.0.*"

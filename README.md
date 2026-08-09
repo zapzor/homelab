@@ -96,6 +96,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **OpenBao** | LXC | Secrets Manager | Debian |
 | **Code Server** | LXC | Coding and IaC management | Debian |
 | **Ntfy** | LXC | Notification service | Debian |
+| **Alloy** | LXC | Data collector for Loki| Debian |
 | **Windows** | VM | Windows Server 2022 - AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
 
 **Personal services:**
@@ -111,6 +112,7 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Changedetection** | LXC | Monitors websites for changes | Debian |
 | **Homepage** | LXC | Home lab dashboard | Debian |
 | **Commafeed** | LXC | RSS server | Debian |
+| **Navidrome** | LXC | Music server | Debian |
 | **Home Assistant** | VM | Home automation platform | HAOS |
 
 **Cloud:**
