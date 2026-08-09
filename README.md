@@ -166,6 +166,10 @@ I also use an SSO service, Authelia, for MFA support and making tracking login d
 
 ## 💾 Backups & Disaster Recovery
 
+Local backups are managed through Proxmox Backup Server (PBS). PBS has some advantages over a standard disk backup, such as deduplication, backup validation, and improved retention management. Previously just used vzdumps with native Proxmox features, but these weren't very reliable and I would have to restore a few times before one worked. PBS has solved this problem with the aforementioned features.
+
+I then sync these backups to an S3 instance on AWS, using PBS. I previously synced them to a server hosted at another residence, but I wanted to get some experience with AWS and PBS offers a built in S3 API, so this seemed like a good opportunity to get some AWS experience. Depending on the costing, I may switch to a cheaper provider, or go back to my previous offsite self-hosted strategy.
+
 | What | Method | Frequency | Destination |
 |---|---|---|---|
 | **VM/LXC snapshots** | vzdump | daily, weekly, monthly; ~250GB total backup set | local disk + cloud |
@@ -174,16 +178,52 @@ I also use an SSO service, Authelia, for MFA support and making tracking login d
 
 **Recovery plan:** Proxmox host rebuild from ISO + restore latest vzdump backups; Docker configs pulled from workstation. Restore can take ~14 hours from cloud, ~1 hour onsite.
 
-Local backups are managed through Proxmox Backup Server (PBS). PBS has some advantages over a standard disk backup, such as deduplication, backup validation, and improved retention management. Previously just used vzdumps with native Proxmox features, but these weren't very reliable and I would have to restore a few times before one worked. PBS has solved this problem with the aforementioned features.
-
-I then sync these backups to an S3 instance on AWS, using PBS. I previously synced them to a server hosted at another residence, but I wanted to get some experience with AWS and PBS offers a built in S3 API, so this seemed like a good opportunity to get some AWS experience. Depending on the costing, I may switch to a cheaper provider, or go back to my previous offsite self-hosted strategy.
-
 ---
 
 ## 🛠️ Monitoring
 
-- Prometheus and Loki + Grafana for service, logs, and resource monitoring. I have alerts configured for when I am nearing storage capacity, CPU temperature is high or when services have broken. I use Grafana for data visualisation. I set this up after a drive died on me with little warning and so naturally I tried to figure out if I could get some kind of alert system configured that would let me know if my drives are dying based on SMART stats.
-- Notification method: Amazon SES (SMTP server). I previously used Ntfy to push notifications to Telegram, but since I wanted AWS experience, and I prefer emails to push notifications, I switched to SES. Depending on the costs...
+I use Grafana for alerting with Prometheus, Loki, PostgreSQL, and SNMP configured as datasources. I'd like to add CloudWatch as another when I expand my AWS infrastructure further.
+
+Grafana is very useful for visualizing data on my infrastructure. I have Unified Alerts configured to alert me via an SMTP server (AWS SES) when certain conditions are met, such as a systemd service failing on the hypervisor or a workload running out of memory. I previously used Ntfy to push notifications to Telegram, but since I wanted AWS experience, and I prefer emails to push notifications for this stuff, I switched to SES.
+
+I decided I needed an alerting/monitoring system after a drive died on me without warning. The data was backed up so nothing critical was lost, but I would have liked some advance warning before that happened, so setting up Grafana was the next step.
+
+### Prometheus Alerts (`proxmox_nodes` + `proxmox_vms`, 30s eval)
+
+| Alert | Severity | Query |
+|-------|----------|-------|
+| Node Down | critical | `up{job="pve"}` |
+| High CPU | warning | `100 - avg(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100` |
+| High Memory | critical | `(MemTotal - MemAvailable) / MemTotal * 100` |
+| High Load | warning | `node_load1 / count(node_cpu_seconds_total{mode="idle"})` |
+| Disk Full | warning | `(1 - filesystem_avail / filesystem_size) * 100` |
+| Root Full | warning | same, `{mountpoint="/"}` |
+| Low Inodes | warning | `files_free / files * 100` |
+| Swap High | warning | `(SwapTotal - SwapFree) / SwapTotal * 100` |
+| Net RX Errors | warning | `rate(node_network_receive_errs_total[5m])` |
+| Net TX Errors | warning | `rate(node_network_transmit_errs_total[5m])` |
+| ZFS Scrub Overdue | warning | `time() - node_zfs_zpool_scrub_time &gt; 35d` |
+| CPU Temp | critical | `node_hwmon_temp_celsius{sensor=~"core.*"}` |
+| SMART Failing | critical | `smartctl_device_smart_healthy == 0` |
+| Reallocated Sectors | critical | `smartctl_device_reallocated_sector_ct &gt; 0` |
+| Pending Sectors | warning | `smartctl_device_pending_sector_ct &gt; 0` |
+| Systemd Failed | warning | `node_systemd_unit_state{state="failed"} == 1` |
+| VM High CPU | warning | `pve_cpu_usage_ratio * 100` |
+| VM High Memory | warning | `pve_memory_usage_bytes / pve_memory_size_bytes * 100` |
+| Storage Full | warning | `pve_storage_used_bytes / pve_storage_size_bytes * 100` |
+
+### Loki Alerts (`proxmox_logs`, 60s eval, 5m window)
+
+| Alert | Severity | Query |
+|-------|----------|-------|
+| OOM Kill | critical | `count_over_time({job="proxmox-syslog"} \|= "Out of memory" [5m])` |
+| Disk I/O Errors | critical | `... \|= "I/O error"` |
+| Failed Logins | info | `... \|= "authentication failure"` (&gt;5) |
+| Privilege Escalation | info | `... \|= "sudo:" \|~ "USER=root\|COMMAND="` |
+| Kernel Panic | critical | `... \|~ "Kernel panic\|BUG:\|Call trace\|..."` |
+| Segfault | warning | `... \|= "segfault"` |
+
+**Notes:** Node Down alerts on no-data. All others use `noDataState: OK`.
 
 ---
 
