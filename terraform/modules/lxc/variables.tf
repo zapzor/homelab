@@ -19,6 +19,7 @@ variable "memory" {
   type = number
 }
 
+
 variable "rootfs_size" {
   type = number
 }
@@ -37,7 +38,7 @@ variable "ip" {
 
 variable "gateway" {
   type = string
-  default = "10.99.0.1"
+  default = "dhcp"
 }
 
 variable "ostemplate" {
@@ -47,9 +48,7 @@ variable "ostemplate" {
 
 variable "os_type" {
   type    = string
-  default = "debian"
 }
 variable "unprivileged" {
-  type    = string
-  default = "true"
+  type    = bool
 }

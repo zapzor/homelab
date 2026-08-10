@@ -2,6 +2,7 @@
 resource "proxmox_virtual_environment_container" "this" {
   node_name    = var.node
   vm_id        = var.vmid
+  unprivileged = var.unprivileged
 
   initialization {
     hostname = var.name
@@ -15,7 +16,7 @@ resource "proxmox_virtual_environment_container" "this" {
 
   }
   cpu {
-    cores = var.cores
+    cores        = var.cores
   }
 
   memory {
@@ -31,6 +32,7 @@ resource "proxmox_virtual_environment_container" "this" {
     template_file_id = var.ostemplate
     type             = var.ostemplate == null ? var.os_type : null
   }
+
   lifecycle {
     ignore_changes = [
       environment_variables,
@@ -41,16 +43,9 @@ resource "proxmox_virtual_environment_container" "this" {
       features,
       disk,
       initialization,
-      memory,
-      unprivileged,
       console,
-      cpu,
-      network_interface,
-      timeout_clone,
-      timeout_create,
-      timeout_delete,
-      timeout_start,
-      timeout_update,
+      #cpu,
+      network_interface
     ]
   }
 }

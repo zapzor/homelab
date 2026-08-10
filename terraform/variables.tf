@@ -1,9 +1,9 @@
 # Some global variables for Terraform
-variable "container_password" {
-  type      = string
-  sensitive = true
-  default   = "password123"
-}
+# variable "container_password" {
+#   type      = string
+#   sensitive = true
+#   default   = "password123"
+# }
 variable "node" {
   type    = string
   default = "pve"
@@ -21,7 +21,7 @@ variable "storage" {
 
 variable "gateway" {
   type    = string
-  default = "10.99.0.1"
+  default = "dhcp"
 }
 
 variable "ostemplate" {
@@ -29,7 +29,22 @@ variable "ostemplate" {
   default = "local:vztmpl/debian-13-standard_13.6-1_amd64.tar.zst"
 }
 
-variable "swap" {
+variable "os_type" {
   type    = string
-  default = "512"
+  default = "debian"
+}
+
+variable "limit" {
+  type    = number
+  default = 1
+}
+
+variable "architecture" {
+  type    = string
+  default = "amd64"
+}
+
+variable "swap" {
+  type    = number
+  default = 0
 }
