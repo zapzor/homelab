@@ -14,12 +14,10 @@ module "lxc" {
   vmid         = each.value.vmid
   cores        = each.value.cores
   memory       = each.value.memory
-
   size         = each.value.size
-  ip           = each.value.ip
   unprivileged = try(each.value.unprivileged, true)
+  keyctl       = try(each.value.keyctl, true)
 
   node       = var.node
-  #os_template = "local:vztmpl/debian-13-standard_13.6-1_amd64.tar.zst"
   os_type    = "debian"
 }

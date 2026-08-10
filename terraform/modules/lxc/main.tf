@@ -9,8 +9,10 @@ resource "proxmox_virtual_environment_container" "this" {
 
     ip_config {
       ipv4 {
-        address = var.ip
-        gateway = "dhcp"
+        address = "dhcp"
+      }
+      ipv6 {
+        address = "dhcp"
       }
     }
 
@@ -19,6 +21,17 @@ resource "proxmox_virtual_environment_container" "this" {
     cores     = var.cores
     architecture = "amd64"
     limit    = 0
+  }
+
+  network_interface {
+    name = "eth0"
+    bridge = "vmbr0"
+    enabled = true
+    firewall = false
+    host_managed = false
+    mtu = 0
+    rate_limit = 0
+    vlan_id = 0
   }
 
   memory {
@@ -37,6 +50,14 @@ resource "proxmox_virtual_environment_container" "this" {
     type      = "tty"
 }
 
+  features {
+    fuse = false
+    keyctl = var.keyctl
+    mknod = false
+    mount = []
+    nesting = true
+  }
+
   operating_system {
     template_file_id = "local:vztmpl/debian-13-standard_13.6-1_amd64.tar.zst"
     type             = "debian"
@@ -46,11 +67,7 @@ resource "proxmox_virtual_environment_container" "this" {
     ignore_changes = [
       operating_system,
       mount_point,
-      network_interface,
-      description,
-      features,
-      initialization,
-      tags,
+      environment_variables
     ]
   }
 }

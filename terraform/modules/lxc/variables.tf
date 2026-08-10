@@ -19,23 +19,9 @@ variable "memory" {
   type = number
 }
 
-
 variable "size" {
   type = number
 }
-
-variable "ip" {
-  type = string
-}
-
-variable "gateway" {
-  type = string
-  default = "dhcp"
-}
-
-# variable "os_template" {
-#   type = string
-# }
 
 variable "os_type" {
   type    = string
@@ -43,4 +29,8 @@ variable "os_type" {
 
 variable "unprivileged" {
   type    = bool
+}
+
+variable "keyctl" {
+  type = bool
 }
