@@ -20,16 +20,8 @@ variable "memory" {
 }
 
 
-variable "rootfs_size" {
+variable "size" {
   type = number
-}
-
-variable "storage" {
-  type = string
-}
-
-variable "bridge" {
-  type = string
 }
 
 variable "ip" {
@@ -41,14 +33,14 @@ variable "gateway" {
   default = "dhcp"
 }
 
-variable "ostemplate" {
-  type    = string
-  default = null
-}
+# variable "os_template" {
+#   type = string
+# }
 
 variable "os_type" {
   type    = string
 }
+
 variable "unprivileged" {
   type    = bool
 }

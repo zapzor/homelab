@@ -10,42 +10,47 @@ resource "proxmox_virtual_environment_container" "this" {
     ip_config {
       ipv4 {
         address = var.ip
-        gateway = var.gateway
+        gateway = "dhcp"
       }
     }
 
   }
   cpu {
-    cores        = var.cores
+    cores     = var.cores
+    architecture = "amd64"
+    limit    = 0
   }
 
   memory {
     dedicated = var.memory
+    swap = 0
   }
 
   disk {
-    datastore_id = var.storage
-    size         = var.rootfs_size
+    datastore_id = "local-lvm"
+    size         = var.size
   }
 
+  console {
+    enabled   = true
+    tty_count = 2
+    type      = "tty"
+}
+
   operating_system {
-    template_file_id = var.ostemplate
-    type             = var.ostemplate == null ? var.os_type : null
+    template_file_id = "local:vztmpl/debian-13-standard_13.6-1_amd64.tar.zst"
+    type             = "debian"
   }
 
   lifecycle {
     ignore_changes = [
-      environment_variables,
       operating_system,
-      description,
-      tags,
       mount_point,
+      network_interface,
+      description,
       features,
-      disk,
       initialization,
-      console,
-      #cpu,
-      network_interface
+      tags,
     ]
   }
 }

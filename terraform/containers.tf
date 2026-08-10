@@ -15,14 +15,11 @@ module "lxc" {
   cores        = each.value.cores
   memory       = each.value.memory
 
-  rootfs_size  = each.value.size
+  size         = each.value.size
   ip           = each.value.ip
   unprivileged = try(each.value.unprivileged, true)
 
   node       = var.node
-  bridge     = var.bridge
-  storage    = var.storage
-  gateway    = var.gateway
-  ostemplate = var.ostemplate
-  os_type    = var.os_type
+  #os_template = "local:vztmpl/debian-13-standard_13.6-1_amd64.tar.zst"
+  os_type    = "debian"
 }

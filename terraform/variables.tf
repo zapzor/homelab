@@ -1,13 +1,4 @@
 # Some global variables for Terraform
-# variable "container_password" {
-#   type      = string
-#   sensitive = true
-#   default   = "password123"
-# }
-variable "node" {
-  type    = string
-  default = "pve"
-}
 
 variable "bridge" {
   type    = string
@@ -19,32 +10,7 @@ variable "storage" {
   default = "local-lvm"
 }
 
-variable "gateway" {
-  type    = string
-  default = "dhcp"
-}
-
-variable "ostemplate" {
-  type    = string
-  default = "local:vztmpl/debian-13-standard_13.6-1_amd64.tar.zst"
-}
-
-variable "os_type" {
-  type    = string
-  default = "debian"
-}
-
-variable "limit" {
-  type    = number
-  default = 1
-}
-
-variable "architecture" {
-  type    = string
-  default = "amd64"
-}
-
-variable "swap" {
-  type    = number
-  default = 0
+variable "node" {
+  type = string
+  default = "amaterasu"
 }
