@@ -44,12 +44,21 @@ resource "proxmox_virtual_environment_container" "this" {
     size         = var.size
   }
 
+dynamic "mount_point" {
+  for_each = var.mount_points
+
+  content {
+    size          = mount_point.value.size
+    volume        = mount_point.value.volume
+    path          = mount_point.value.path
+  }
+}
+
   console {
     enabled   = true
     tty_count = 2
     type      = "tty"
 }
-
   features {
     fuse = false
     keyctl = var.keyctl
@@ -65,9 +74,10 @@ resource "proxmox_virtual_environment_container" "this" {
 
   lifecycle {
     ignore_changes = [
+    # bpg/proxmox cannot recover the original LXC template_file_id
+    # from an existing container. Managing this field causes imported
+    # containers to appear as replacements.
       operating_system,
-      mount_point,
-      environment_variables
     ]
   }
 }

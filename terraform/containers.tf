@@ -17,6 +17,7 @@ module "lxc" {
   size         = each.value.size
   unprivileged = try(each.value.unprivileged, true)
   keyctl       = try(each.value.keyctl, true)
+  mount_points = try(each.value.mount_points, [])
 
   node       = var.node
   os_type    = "debian"

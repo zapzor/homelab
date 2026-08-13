@@ -34,3 +34,13 @@ variable "unprivileged" {
 variable "keyctl" {
   type = bool
 }
+
+variable "mount_points" {
+  type = list(object({
+    size   = optional(string)
+    volume = string
+    path   = string
+  }))
+
+  default = []
+}
