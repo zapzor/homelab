@@ -1,180 +1,210 @@
-# The workload inventory
+# This file defines the LXC containers to be created in Proxmox using Terraform.
 wireguard:
-  cores: 1
-  memory: 512
-  size: 8
-  ip: "dhcp"
-
-mediaserver:
-  cores: 2
-  memory: 4096
-  size: 8
-  ip: "dhcp"
-
-ntfy:
+  vmid: 100
   cores: 1
   memory: 512
   size: 2
   ip: "dhcp"
 
-navidrome:
-  cores: 2
-  memory: 1024
-  size: 4
-  ip: "dhcp"
-
-  alloy:
-  cores: 2
-  memory: 1024
-  size: 4
-  ip: "dhcp"
-
-postgresql:
+media-server:
+  vmid: 101
   cores: 1
-  memory: 1024
+  memory: 512
   size: 8
   ip: "dhcp"
 
+ntfy:
+  vmid: 102
+  cores: 1
+  memory: 512
+  size: 2
+  ip: "dhcp"
+
 homepage:
+  vmid: 104
   cores: 2
   memory: 1024
+  size: 3
+  ip: "dhcp"
+
+postgresql:
+  vmid: 103
+  cores: 1
+  memory: 1024
+  size: 4
+  ip: "dhcp"
+
+navidrome:
+  vmid: 106
+  cores: 2
+  memory: 1024
+  size: 4
+  ip: "dhcp"
+
+
+alloy:
+  vmid: 108
+  cores: 1
+  memory: 256
   size: 8
   ip: "dhcp"
 
 docker:
+  vmid: 110
   cores: 2
   memory: 2048
-  size: 8
+  size: 20
   ip: "dhcp"
+  keyctl: false
+
 
 pihole:
+  vmid: 111
   cores: 2
   memory: 512
-  size: 8
+  size: 2
   ip: "dhcp"
 
 changedetection:
+  vmid: 112
   cores: 4
   memory: 4096
-  size: 8
+  size: 10
   ip: "dhcp"
 
 caliweb:
+  vmid: 113
   cores: 2
   memory: 2048
-  size: 8
+  size: 6
   ip: "dhcp"
 
 grafana:
+  vmid: 114
   cores: 1
   memory: 512
-  size: 8
+  size: 4
   ip: "dhcp"
+  volume: 1
 
 commafeed:
+  vmid: 115
   cores: 2
   memory: 2048
-  size: 8
+  size: 4
   ip: "dhcp"
 
 audiobookshelf:
+  vmid: 116
   cores: 2
   memory: 2048
-  size: 8
+  size: 10
   ip: "dhcp"
 
 prometheus:
+  vmid: 117
   cores: 1
   memory: 2048
-  size: 8
+  size: 4
   ip: "dhcp"
 
 prometheus-pve-exporter:
+  vmid: 119
   cores: 1
   memory: 512
-  size: 8
+  size: 2
   ip: "dhcp"
 
 ollama:
+  vmid: 120
   cores: 4
   memory: 4096
-  size: 8
+  size: 40
   ip: "dhcp"
 
 frigate:
+  vmid: 121
   cores: 4
   memory: 2048
-  size: 8
+  size: 25
   ip: "dhcp"
+  keyctl: false
 
 mqtt:
+  vmid: 122
   cores: 1
   memory: 512
-  size: 8
+  size: 2
   ip: "dhcp"
 
 invidious:
+  vmid: 123
   cores: 2
   memory: 4096
-  size: 8
-  ip: "dhcp"
-
-nexterm:
-  cores: 2
-  memory: 2048
-  size: 8
+  size: 20
   ip: "dhcp"
 
 authelia:
+  vmid: 126
   cores: 1
   memory: 512
-  size: 8
+  size: 2
   ip: "dhcp"
 
 loki:
+  vmid: 127
   cores: 1
   memory: 512
-  size: 8
+  size: 2
   ip: "dhcp"
 
 vikunja:
+  vmid: 128
   cores: 1
   memory: 1024
-  size: 8
+  size: 4
   ip: "dhcp"
 
 proxmox-backup-server:
+  vmid: 131
   cores: 2
   memory: 2048
-  size: 8
+  size: 10
   ip: "dhcp"
 
 gramps-web:
+  vmid: 133
   cores: 2
   memory: 4096
-  size: 8
+  size: 20
   ip: "dhcp"
 
 traefik:
+  vmid: 134
   cores: 1
   memory: 512
-  size: 8
+  size: 2
   ip: "dhcp"
 
 tailscale:
+  node: "pve"
+  vmid: 135
   cores: 2
   memory: 2048
   size: 8
   ip: "dhcp"
 
 openbao:
+  vmid: 136
   cores: 1
   memory: 1024
-  size: 8
+  size: 4
   ip: "dhcp"
 
-code-server:
-  cores: 4
-  memory: 2048
-  size: 8
-  ip: "dhcp"
+# Ignored as my code runs on here. Working on a fix.
+# code-server:
+#   vmid: 137
+#   cores: 4
+#   memory: 2048
+#   size: 8
+#   ip: "dhcp"
