@@ -18,25 +18,25 @@ resource "proxmox_virtual_environment_container" "this" {
 
   }
   cpu {
-    cores     = var.cores
+    cores        = var.cores
     architecture = "amd64"
-    limit    = 0
+    limit        = 0
   }
 
   network_interface {
-    name = "eth0"
-    bridge = "vmbr0"
-    enabled = true
-    firewall = false
+    name         = "eth0"
+    bridge       = "vmbr0"
+    enabled      = true
+    firewall     = false
     host_managed = false
-    mtu = 0
-    rate_limit = 0
-    vlan_id = 0
+    mtu          = 0
+    rate_limit   = 0
+    vlan_id      = 0
   }
 
   memory {
     dedicated = var.memory
-    swap = 0
+    swap      = 0
   }
 
   disk {
@@ -44,26 +44,26 @@ resource "proxmox_virtual_environment_container" "this" {
     size         = var.size
   }
 
-dynamic "mount_point" {
-  for_each = var.mount_points
+  dynamic "mount_point" {
+    for_each = var.mount_points
 
-  content {
-    size          = mount_point.value.size
-    volume        = mount_point.value.volume
-    path          = mount_point.value.path
+    content {
+      size   = mount_point.value.size
+      volume = mount_point.value.volume
+      path   = mount_point.value.path
+    }
   }
-}
 
   console {
     enabled   = true
     tty_count = 2
     type      = "tty"
-}
+  }
   features {
-    fuse = false
-    keyctl = var.keyctl
-    mknod = false
-    mount = []
+    fuse    = false
+    keyctl  = var.keyctl
+    mknod   = false
+    mount   = []
     nesting = true
   }
 
@@ -74,9 +74,9 @@ dynamic "mount_point" {
 
   lifecycle {
     ignore_changes = [
-    # bpg/proxmox cannot recover the original LXC template_file_id
-    # from an existing container. Managing this field causes imported
-    # containers to appear as replacements.
+      # bpg/proxmox cannot recover the original LXC template_file_id
+      # from an existing container. Managing this field causes imported
+      # containers to appear as replacements.
       operating_system,
     ]
   }

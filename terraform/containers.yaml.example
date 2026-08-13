@@ -201,7 +201,7 @@ openbao:
   size: 4
   ip: "dhcp"
 
-# Ignored as my code runs on here. Working on a fix.
+# Ignored as my code runs on here.
 # code-server:
 #   vmid: 137
 #   cores: 4

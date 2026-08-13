@@ -23,12 +23,8 @@ variable "size" {
   type = number
 }
 
-variable "os_type" {
-  type    = string
-}
-
 variable "unprivileged" {
-  type    = bool
+  type = bool
 }
 
 variable "keyctl" {

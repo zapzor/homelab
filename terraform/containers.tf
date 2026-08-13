@@ -1,8 +1,8 @@
 # Imports containers added from outside of Terraform.
 import {
- for_each = local.containers
- to       = module.lxc[each.key].proxmox_virtual_environment_container.this
- id       = "${var.node}/${each.value.vmid}"
+  for_each = local.containers
+  to       = module.lxc[each.key].proxmox_virtual_environment_container.this
+  id       = "${var.node}/${each.value.vmid}"
 }
 
 # This calls the lxc module for each container defined in the containers.yaml file
@@ -19,6 +19,5 @@ module "lxc" {
   keyctl       = try(each.value.keyctl, true)
   mount_points = try(each.value.mount_points, [])
 
-  node       = var.node
-  os_type    = "debian"
+  node = var.node
 }

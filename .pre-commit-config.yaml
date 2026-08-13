@@ -1,16 +1,25 @@
 repos:
   # Secret scanning
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.18.2
+    rev: v8.30.0
     hooks:
       - id: gitleaks
 
-  # General security / quality hooks
+  # General security / quality
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: detect-private-key
       - id: check-added-large-files
       - id: check-merge-conflict
       - id: trailing-whitespace
       - id: end-of-file-fixer
+      - id: check-yaml
+
+  # Terraform
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.108.1
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_validate
+      - id: terraform_tflint
