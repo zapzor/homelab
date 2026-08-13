@@ -23,3 +23,8 @@ repos:
       - id: terraform_fmt
       - id: terraform_validate
       - id: terraform_tflint
+
+  - repo: https://github.com/ansible/ansible-lint
+    rev: v25.8.1
+    hooks:
+      - id: ansible-lint

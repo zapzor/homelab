@@ -1,0 +1,9 @@
+- name: Add env vars to bashrc
+  hosts: proxmox_lxcs
+  tasks:
+    - name: Add export lines to bashrc
+      ansible.builtin.lineinfile:
+        path: /root/.bashrc
+        line: 'export MY_VAR="my_value"'
+        create: true
+        mode: '0644'
