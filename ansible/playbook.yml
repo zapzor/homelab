@@ -1,5 +1,5 @@
 - name: Add env vars to bashrc
-  hosts: proxmox_lxcs
+  hosts: proxmox_all_lxc
   tasks:
     - name: Add export lines to bashrc
       ansible.builtin.lineinfile:

@@ -1,0 +1,7 @@
+---
+plugin: community.proxmox.proxmox
+url: "{{ lookup('ansible.builtin.env', 'PROXMOX_URL') }}"
+user: ansible@pve
+token_id: "{{ (lookup('community.hashi_vault.vault_kv2_get', 'ansible', engine_mount_point='homelab')).data.data.token_id }}"
+token_secret: "{{ (lookup('community.hashi_vault.vault_kv2_get', 'ansible', engine_mount_point='homelab')).data.data.token_secret }}"
+validate_certs: false

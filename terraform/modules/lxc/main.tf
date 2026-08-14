@@ -11,9 +11,6 @@ resource "proxmox_virtual_environment_container" "this" {
       ipv4 {
         address = "dhcp"
       }
-      ipv6 {
-        address = "dhcp"
-      }
     }
 
   }
