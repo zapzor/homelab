@@ -1,4 +1,4 @@
-# 🏠 Homelab
+# Homelab
 
 A single-node home lab built from a repurposed PC, grown from a few self-hosted services into a platform for learning Linux system administration, networking, and infrastructure automation. Runs on Proxmox VE with VLAN segmentation, automated backup validation, and VPN-secured remote access.
 
@@ -9,7 +9,7 @@ A single-node home lab built from a repurposed PC, grown from a few self-hosted 
 
 ---
 
-## 📋 Overview
+## Overview
 
 | | |
 |---|---|
@@ -20,7 +20,7 @@ A single-node home lab built from a repurposed PC, grown from a few self-hosted 
 
 ---
 
-## 🖥️ Hardware
+## Hardware
 
 Repurposed PC:
 | Component | Spec |
@@ -33,7 +33,7 @@ Repurposed PC:
 
 ---
 
-## 🧱 Virtualization Layer — Proxmox VE
+## Virtualization Layer — Proxmox VE
 
 Proxmox is installed directly on bare metal and hosts everything below.
 
@@ -42,7 +42,6 @@ Proxmox is installed directly on bare metal and hosts everything below.
 - **Backup method:** vzdump to internal and off premise drive - see [Backups & Disaster Recovery](#-backups--disaster-recovery)
 
 ### VMs & LXC Containers
-
 
 **Infrastructure:**
 | Name | Type | Purpose | OS |
@@ -65,6 +64,8 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Alloy** | LXC | Data collector for Loki| Debian |
 | **Windows** | VM | Windows Server 2022 - AD/GPO/RDS lab | Windows Server 2022 (evaluation) |
 
+What makes everything work.
+
 **Personal services:**
 | Name | Type | Purpose | OS |
 |---|---|---|---|
@@ -80,6 +81,8 @@ Proxmox is installed directly on bare metal and hosts everything below.
 | **Commafeed** | LXC | RSS server | Debian |
 | **Navidrome** | LXC | Music server | Debian |
 | **Home Assistant** | VM | Home automation platform | HAOS |
+
+The reason I run the server (or the main one, at least).
 
 **Cloud:**
 | Name | Type | Purpose | OS |
@@ -97,7 +100,7 @@ A single Docker container runs inside the dedicated LXC above. Most services wer
 
 ---
 
-## 🌐 Network
+## Network
 
 | | |
 |---|---|
@@ -110,7 +113,7 @@ A single Docker container runs inside the dedicated LXC above. Most services wer
 
 ---
 
-## 🔒 Security
+## Security
 
 | Layer | Control |
 |:---|:---|
@@ -126,13 +129,13 @@ I also use an SSO service, Authelia, for MFA support and making tracking login d
 
 ### Reverse Proxy / Access
 
-- **Reverse proxy:** Back to Traefik. I originally used it, but switched to Nginx Proxy Manager as creating new entries was faster. Migrated back to Traefik for improved Authelia integration and easier automation since I got better at scripting. If I ever find one with proper LXC integration I'll use that as I need to configure a new entry manually every time I add a new service right now.
+- **Reverse proxy:** Traefik. I originally used it, but switched to Nginx Proxy Manager as creating new entries was faster. Migrated back to Traefik for improved Authelia integration and easier automation since I got better at scripting. If I ever find one with proper LXC integration I'll use that as I need to configure a new entry manually every time I add a new service right now.
 - **TLS:** Let's Encrypt via DNS challenge via Cloudflare
 - **External exposure:** Tailscale VPN (Wireguard), with a Headscale instance hosted on an EC2. I previously just used standard Wireguard but that required me to expose a port to the internet... admittedly, that port didn't show up on scanners and thus was very low risk, but I don't like exposing ports so I switched to Tailscale.
 
 ---
 
-## 💾 Backups & Disaster Recovery
+## Backups & Disaster Recovery
 
 Local backups are managed through Proxmox Backup Server (PBS). PBS has some advantages over a standard disk backup, such as deduplication, backup validation, and improved retention management. Previously just used vzdumps with native Proxmox features, but these weren't very reliable and I would have to restore a few times before one worked. PBS has solved this problem with the aforementioned features.
 
@@ -195,7 +198,7 @@ I decided I needed an alerting/monitoring system after a drive died on me withou
 
 ## ⚙️ IaC
 
-I’m starting to codify my homelab infrastructure with Terraform. Right now it's just a basic inventory of my lab environment, but I'd like to expand it to include CI/CD and use Ansible for configuration management.
+I’m starting to codify my homelab infrastructure with Terraform. Right now it's just a basic inventory of my lab environment. It's fully functional and I use Terraform for creating new containers now, but I'd like to expand it to include CI/CD and use Ansible for configuration management.
 
 ---
 
@@ -205,7 +208,7 @@ I’m starting to codify my homelab infrastructure with Terraform. Right now it'
 |---|---|---|
 | IaC | High | Learning Ansible and Terraform |
 | Host docs on AWS + Gitea | Medium | Configuration |
-| Another node for backups | Low | Another server. Expensive. |
+| Another node for backups | Low | Another server. |
 | K3s LXC | Low | Migrating Docker and configuring K3s |
 
 ---
