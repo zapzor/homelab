@@ -1,2 +1,2 @@
 - name: Import environment variables playbook
-  ansible.builtin.import_playbook: playbooks/env-vars.yml
+  ansible.builtin.import_playbook: playbooks/all_lxcs.yml

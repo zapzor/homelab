@@ -1,0 +1,30 @@
+# Ansible
+*.retry
+
+# Vault passwords / secrets
+.vault_password
+.vault_password_file
+vault_password.txt
+
+# Ansible-generated files
+*.log
+
+# Temporary files
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# IDEs
+.vscode/
+.idea/
+
+# Custom env vars (sensitive)
+inventories/host_vars

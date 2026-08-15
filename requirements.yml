@@ -1,0 +1,5 @@
+# requirements.yml
+collections:
+  - name: community.general
+    # optional pin, keep it up‑to‑date
+    version: ">=4.8.0"

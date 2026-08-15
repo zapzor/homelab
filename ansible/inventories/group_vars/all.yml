@@ -1,0 +1,9 @@
+---
+common_packages:
+  - curl
+  - neovim
+  - dnsutils
+  - sudo
+  - gnupg
+  - ca-certificates
+  - unattended-upgrades

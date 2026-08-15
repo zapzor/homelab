@@ -1,0 +1,13 @@
+# Env vars
+export TERM='xterm-256color'
+
+# Aliases
+alias sr='systemctl restart'
+alias ss='systemctl status'
+alias jef='journalctl -ef'
+alias vi='vim'
+
+{% if bashrc_extras is defined %}
+# Host-specific extras
+{{ bashrc_extras }}
+{% endif %}

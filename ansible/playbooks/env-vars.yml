@@ -1,8 +1,0 @@
-- name: Add env vars to bashrc
-  hosts: proxmox_all_lxc
-  tasks:
-    - name: Remove any line matching MY_VAR
-      ansible.builtin.lineinfile:
-        path: /root/.bashrc
-        regexp: '^export MY_VAR='
-        state: absent
