@@ -1,5 +1,4 @@
-# requirements.yml
+# Needed for pre-commit
 collections:
   - name: community.general
-    # optional pin, keep it up‑to‑date
     version: ">=4.8.0"
